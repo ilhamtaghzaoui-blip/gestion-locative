@@ -865,9 +865,9 @@ function buildAptCard(apt) {
       <div class="detail-row"><span class="detail-label">👤 Locataire</span><span class="detail-value">${apt.tenant||'Vacant'}</span></div>
       <div class="detail-row"><span class="detail-label">📅 Date d'entrée</span><span class="detail-value">${fmtDate(apt.entryDate)}</span></div>
       <div class="detail-row"><span class="detail-label">💶 Loyer base</span><span class="detail-value">${fmtMoney(apt.loyer)}</span></div>
-      ${nd?`<div class="detail-row"><span class="detail-label">📈 Proch. augmentation</span><span class="detail-value">${fmtDate(nd.toISOString())}</span></div>`:''}
-      ${apt.obs?`<div class="detail-row"><span class="detail-label">📝 Note</span><span class="detail-value" style="font-size:11px">${apt.obs}</span></div>`:''}
-      ${unpaid>0?`<div class="detail-row"><span class="detail-label">⚠️ Reliquat total</span><span class="detail-value" style="color:var(--danger)">${fmtMoney(unpaid)}</span></div>`:''}
+      ${nd?'<div class="detail-row"><span class="detail-label">📈 Proch. augmentation</span><span class="detail-value">'+fmtDate(nd?.toISOString())+'</span></div>':''}
+      ${apt.obs?'<div class="detail-row"><span class="detail-label">📝 Note</span><span class="detail-value" style="font-size:11px">'+apt.obs+'</span></div>':''}
+      ${unpaid>0?'<div class="detail-row"><span class="detail-label">⚠️ Reliquat total</span><span class="detail-value" style="color:var(--danger)">'+fmtMoney(unpaid)+'</div>':''}
       <div class="months-title" style="margin-top:12px">Paiements ${currentYear}</div>
       ${months}
       <div class="btn-row" style="margin-top:12px">
@@ -878,7 +878,7 @@ function buildAptCard(apt) {
              <button class="btn btn-danger" onclick="markVacant(${apt.id});event.stopPropagation()">🚪 Parti</button>`
         }
       </div>
-      ${!apt.vacant&&unpaid>0?`<div class="btn-row" style="margin-top:8px"><button class="btn btn-danger btn-full" onclick="cancelDebt(${apt.id});event.stopPropagation()">🗑 Annuler toute la dette</button></div>`:''}
+      ${!apt.vacant&&unpaid>0?('<div class="btn-row" style="margin-top:8px"><button class="btn btn-danger btn-full" onclick="cancelDebt('+apt.id+');event.stopPropagation()">🗑 Annuler toute la dette</button></div>'):''}
     </div></div>`;
   }
 
@@ -891,8 +891,8 @@ function buildAptCard(apt) {
       </div>
       <div class="apt-right">
         ${badge}
-        ${loyer?`<div class="apt-loyer">${fmtMoney(loyer)}</div>`:''}
-        <div class="apt-chevron ${isOpen?'open'}">▾</div>
+        ${loyer?('<div class="apt-loyer">'+fmtMoney(loyer)+'</div>') :''}
+        <div class="apt-chevron ${isOpen?'open':''}">▾</div>
       </div>
     </div>
     ${detail}
@@ -915,7 +915,8 @@ function buildMonthsGrid(apt, year) {
     const diff = loyer - pay.paid;
     let cls = isFuture ? 'future' : (diff<=0?'paid':pay.paid>0?'partial':'unpaid');
     const amtD = pay.paid>0 ? (pay.paid>=1000?Math.round(pay.paid/100)/10+'k':pay.paid) : '0';
-    html += `<div class="month-cell ${cls}" ${!isFuture?`onclick="openPaymentModal(${apt.id},${year},${m});event.stopPropagation()"`:''}>
+    const clickAttr = !isFuture ? 'onclick="openPaymentModal('+apt.id+','+year+','+m+');event.stopPropagation()"' : '';
+    html += `<div class="month-cell ${cls}" ${clickAttr}>
       <div class="mo">${MONTHS_SHORT[m-1]}</div><div class="amt">${amtD}</div>
     </div>`;
   }
@@ -951,17 +952,13 @@ function renderTenants() {
         <div class="detail-row"><span class="detail-label">💼 Profession</span><span class="detail-value">${tr.profession||'—'}</span></div>
         <div class="detail-row"><span class="detail-label">📅 Date d'entrée</span><span class="detail-value">${fmtDate(apt.entryDate)}</span></div>
         <div class="detail-row"><span class="detail-label">💶 Loyer actuel</span><span class="detail-value" style="color:var(--primary)">${fmtMoney(computeLoyer(apt,now.getFullYear(),now.getMonth()+1))}</span></div>
-        ${unpaid>0?`<div class="detail-row"><span class="detail-label">⚠️ Reliquat</span><span class="detail-value" style="color:var(--danger)">${fmtMoney(unpaid)}</span></div>`:''}
-        ${nd?`<div class="detail-row"><span class="detail-label">📈 Proch. augmentation</span><span class="detail-value">${fmtDate(nd.toISOString())}</span></div>`:''}
-        ${tr.notes?`<div class="detail-row"><span class="detail-label">📝 Notes</span><span class="detail-value" style="font-size:11px;max-width:65%">${tr.notes}</span></div>`:''}
+        ${unpaid>0?('<div class="detail-row"><span class="detail-label">⚠️ Reliquat</span><span class="detail-value" style="color:var(--danger)">'+fmtMoney(unpaid)+'</span></div>'):''} 
+        ${nd?'<div class="detail-row"><span class="detail-label">📈 Proch. augmentation</span><span class="detail-value">'+fmtDate(nd?.toISOString())+'</span></div>':''}
+        ${tr.notes?('<div class="detail-row"><span class="detail-label">📝 Notes</span><span class="detail-value" style="font-size:11px;max-width:65%">'+tr.notes+'</span></div>'):''}
         <div class="sep"></div>
         <div style="font-weight:700;font-size:13px;margin-bottom:10px;">📎 Documents (${docs.length})</div>
         <div class="doc-list">
-          ${docs.map((doc,i)=>`<div class="doc-item doc-type-${doc.category||'piece'}" onclick="viewDoc(${apt.id},${i})">
-            <div class="doc-icon">${getDocIcon(doc.type)}</div>
-            <div class="doc-info"><div class="doc-name">${doc.name}</div><div class="doc-meta">${doc.category==='bail'?'📋 Contrat de bail':doc.category==='photo'?'🖼 Photo':'📎 Pièce jointe'} · ${fmtDate(doc.date)}</div></div>
-            <button class="doc-del" onclick="deleteDoc(${apt.id},${i});event.stopPropagation()">✕</button>
-          </div>`).join('')}
+          ${docs.map(function(doc,i){ return '<div class="doc-item doc-type-'+(doc.category||'piece')+'" onclick="viewDoc('+apt.id+','+i+')">'+'<div class="doc-icon">'+getDocIcon(doc.type)+'</div>'+'<div class="doc-info"><div class="doc-name">'+doc.name+'</div><div class="doc-meta">'+(doc.category==='bail'?'📋 Contrat de bail':doc.category==='photo'?'🖼 Photo':'📎 Pièce jointe')+' · '+fmtDate(doc.date)+'</div></div>'+'<button class="doc-del" onclick="deleteDoc('+apt.id+','+i+');event.stopPropagation()">✕</button></div>'; }).join('')}
         </div>
         <div class="btn-row" style="margin-top:12px">
           <button class="btn btn-primary" onclick="openTenantFile(${apt.id});event.stopPropagation()">✏️ Modifier fiche</button>
@@ -976,12 +973,12 @@ function renderTenants() {
         <div class="tenant-info">
           <div class="tenant-name">${apt.tenant}</div>
           <div class="tenant-apt">🏠 ${apt.name} · Apt. ${apt.id}</div>
-          ${tr.tel?`<div style="font-size:11px;color:var(--text2);margin-top:1px">📞 ${tr.tel}</div>`:''}
+          ${tr.tel?('<div style="font-size:11px;color:var(--text2);margin-top:1px">📞 '+tr.tel+'</div>'):''}
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
-          ${unpaid>0?`<span class="badge badge-danger">⚠ ${fmtMoney(unpaid)}</span>`:'<span class="badge badge-ok">✓ OK</span>'}
-          ${docs.length>0?`<span class="badge badge-purple">📎 ${docs.length}</span>`:''}
-          <div class="apt-chevron ${isOpen?'open'}">▾</div>
+          ${unpaid>0?('<span class="badge badge-danger">⚠ '+fmtMoney(unpaid)+'</span>'):'<span class="badge badge-ok">✓ OK</span>'}
+          ${docs.length>0?('<span class="badge badge-purple">📎 '+docs.length+'</span>'):''}
+          <div class="apt-chevron ${isOpen?'open':''}">▾</div>
         </div>
       </div>
       ${detail}
@@ -1061,7 +1058,7 @@ function openPaymentModal(aptId,year,month) {
       <div class="stat-card blue"><div class="stat-label">Loyer dû</div><div class="stat-value blue" style="font-size:16px">${fmtMoney(loyer)}</div></div>
       <div class="stat-card ${diff<=0?'green':'red'}"><div class="stat-label">${diff<=0?'Soldé':'Reste à payer'}</div><div class="stat-value ${diff<=0?'green':'red'}" style="font-size:16px">${diff<=0?'✓':fmtMoney(diff)}</div></div>
     </div>
-    ${pay.paid>0?`<div style="font-size:13px;color:var(--text2);margin-bottom:12px;font-weight:600">💵 Déjà enregistré: <strong style="color:var(--success)">${fmtMoney(pay.paid)}</strong></div>`:''}
+    ${pay.paid>0?('<div style="font-size:13px;color:var(--text2);margin-bottom:12px;font-weight:600">💵 Déjà enregistré: <strong style="color:var(--success)">'+fmtMoney(pay.paid)+'</strong></div>'):''}
     <div class="form-group"><label>Montant payé ce mois (MAD)</label><input type="number" id="pay-amount" value="${pay.paid||''}" placeholder="${loyer}" inputmode="numeric"></div>
     <div class="form-group"><label>Reliquat / ajustement (MAD)</label><input type="number" id="pay-reliquat" value="${pay.reliquat||0}" placeholder="0" inputmode="numeric"></div>
     <div class="form-group"><label>Note</label><input type="text" id="pay-note" value="${pay.note||''}" placeholder="Chèque, virement, espèces..."></div>
