@@ -4,470 +4,641 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>PolyDeco — Gestion Locative</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>TAGHZAOUI Gestion Locative</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f0f0f;
-    --surface: #181818;
-    --surface2: #222222;
-    --border: #2e2e2e;
-    --accent: #d4a853;
-    --accent2: #e8c27a;
-    --danger: #e05c5c;
-    --success: #5cbf8a;
-    --warn: #e09b3c;
-    --text: #f0ece4;
-    --text2: #9a9590;
-    --text3: #5a5650;
-    --radius: 14px;
-    --radius-sm: 8px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; overflow: hidden; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.5; }
+:root {
+  --primary: #2563EB;
+  --primary-light: #EFF6FF;
+  --primary-mid: #BFDBFE;
+  --secondary: #0EA5E9;
+  --accent: #F59E0B;
+  --accent-light: #FEF3C7;
+  --success: #10B981;
+  --success-light: #D1FAE5;
+  --danger: #EF4444;
+  --danger-light: #FEE2E2;
+  --warn: #F97316;
+  --warn-light: #FFEDD5;
+  --purple: #8B5CF6;
+  --purple-light: #EDE9FE;
+  --pink: #EC4899;
+  --pink-light: #FCE7F3;
+  --bg: #F0F4FF;
+  --surface: #FFFFFF;
+  --surface2: #F8FAFF;
+  --border: #E2E8F0;
+  --text: #1E293B;
+  --text2: #64748B;
+  --text3: #94A3B8;
+  --radius: 18px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 12px rgba(37,99,235,0.08);
+  --shadow-md: 0 4px 24px rgba(37,99,235,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.5; }
 
-  /* LAYOUT */
-  #app { display: flex; flex-direction: column; height: 100dvh; }
-  #header { 
-    background: var(--surface); 
-    padding: 14px 18px 12px; 
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 12px;
-    flex-shrink: 0;
-  }
-  .header-logo { 
-    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px; 
-    color: var(--accent); letter-spacing: -0.3px; flex: 1;
-  }
-  .header-logo span { color: var(--text2); font-weight: 400; font-size: 12px; display: block; margin-top: -2px; }
-  #main { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  #bottomnav { 
-    background: var(--surface); border-top: 1px solid var(--border); 
-    display: flex; flex-shrink: 0;
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
-  .nav-btn {
-    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 10px 4px 8px; cursor: pointer; color: var(--text3); font-size: 10px;
-    font-family: 'DM Sans', sans-serif; letter-spacing: 0.3px; text-transform: uppercase;
-    transition: color 0.2s; border: none; background: none;
-    gap: 4px;
-  }
-  .nav-btn.active { color: var(--accent); }
-  .nav-btn svg { width: 22px; height: 22px; }
+/* HEADER */
+#app { display: flex; flex-direction: column; height: 100dvh; }
+#header {
+  background: linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%);
+  padding: 14px 18px 12px;
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(37,99,235,0.3);
+}
+.header-logo {
+  flex: 1;
+  font-family: 'Playfair Display', serif;
+  font-weight: 800; font-size: 16px;
+  color: #fff; letter-spacing: -0.3px;
+}
+.header-logo span { font-family: 'Nunito', sans-serif; font-weight: 500; font-size: 11px; color: rgba(255,255,255,0.75); display: block; margin-top: -1px; letter-spacing: 0.5px; text-transform: uppercase; }
+.header-badge { background: rgba(255,255,255,0.2); color: #fff; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
 
-  /* VIEWS */
-  .view { display: none; padding: 16px; }
-  .view.active { display: block; }
+#main { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+#main::-webkit-scrollbar { display: none; }
 
-  /* CARDS */
-  .apt-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    margin-bottom: 12px; overflow: hidden; transition: border-color 0.2s;
-  }
-  .apt-card:active { border-color: var(--accent); }
-  .apt-header {
-    display: flex; align-items: center; gap: 10px; padding: 14px 16px 12px; cursor: pointer;
-  }
-  .apt-num {
-    width: 36px; height: 36px; border-radius: 10px; background: var(--surface2);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent);
-    border: 1px solid var(--border); flex-shrink: 0;
-  }
-  .apt-info { flex: 1; min-width: 0; }
-  .apt-name { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .apt-tenant { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .apt-status { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
-  .badge {
-    display: inline-flex; align-items: center; border-radius: 20px; padding: 2px 10px;
-    font-size: 11px; font-weight: 500; white-space: nowrap;
-  }
-  .badge-ok { background: rgba(92,191,138,0.12); color: var(--success); border: 1px solid rgba(92,191,138,0.25); }
-  .badge-warn { background: rgba(224,155,60,0.12); color: var(--warn); border: 1px solid rgba(224,155,60,0.25); }
-  .badge-danger { background: rgba(224,92,92,0.12); color: var(--danger); border: 1px solid rgba(224,92,92,0.25); }
-  .badge-vacant { background: rgba(90,86,80,0.2); color: var(--text3); border: 1px solid var(--border); }
-  .badge-info { background: rgba(212,168,83,0.1); color: var(--accent); border: 1px solid rgba(212,168,83,0.2); }
-  .apt-loyer { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+/* BOTTOM NAV */
+#bottomnav {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex; flex-shrink: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 10px 4px 8px; cursor: pointer; color: var(--text3); font-size: 10px;
+  font-family: 'Nunito', sans-serif; font-weight: 700; letter-spacing: 0.2px;
+  transition: all 0.2s; border: none; background: none; gap: 3px; text-transform: uppercase;
+}
+.nav-btn.active { color: var(--primary); }
+.nav-btn.active .nav-icon-wrap { background: var(--primary-light); }
+.nav-icon-wrap { width: 36px; height: 28px; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+.nav-btn svg { width: 20px; height: 20px; }
 
-  /* APT DETAIL */
-  .apt-detail { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
-  .apt-detail.open { display: block; }
-  .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
-  .detail-row:last-child { border-bottom: none; }
-  .detail-label { font-size: 12px; color: var(--text2); }
-  .detail-value { font-size: 13px; font-weight: 500; }
+/* VIEWS */
+.view { display: none; padding: 16px 14px; animation: fadeIn 0.2s ease; }
+.view.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* MONTH GRID */
-  .months-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; padding: 12px 0 4px; }
-  .month-cell {
-    aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; cursor: pointer;
-    border: 1.5px solid var(--border); background: var(--surface2); transition: all 0.15s;
-    font-size: 10px; gap: 1px; position: relative;
-  }
-  .month-cell .mo { font-size: 9px; color: var(--text2); font-weight: 500; }
-  .month-cell .amt { font-size: 9px; font-weight: 600; }
-  .month-cell.paid { background: rgba(92,191,138,0.1); border-color: rgba(92,191,138,0.3); }
-  .month-cell.paid .amt { color: var(--success); }
-  .month-cell.partial { background: rgba(224,155,60,0.1); border-color: rgba(224,155,60,0.3); }
-  .month-cell.partial .amt { color: var(--warn); }
-  .month-cell.unpaid { background: rgba(224,92,92,0.08); border-color: rgba(224,92,92,0.25); }
-  .month-cell.unpaid .amt { color: var(--danger); }
-  .month-cell.future { opacity: 0.4; cursor: default; }
-  .month-cell:active:not(.future) { transform: scale(0.92); }
+/* SECTION TITLE */
+.section-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 17px; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.section-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
 
-  /* ACTION BUTTONS */
-  .btn-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-  .btn {
-    flex: 1; min-width: 0; padding: 10px 12px; border-radius: var(--radius-sm); border: none;
-    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .btn:active { transform: scale(0.97); }
-  .btn-primary { background: var(--accent); color: #1a1000; }
-  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-  .btn-danger { background: rgba(224,92,92,0.15); color: var(--danger); border: 1px solid rgba(224,92,92,0.3); }
-  .btn-success { background: rgba(92,191,138,0.15); color: var(--success); border: 1px solid rgba(92,191,138,0.3); }
-  .btn-sm { flex: none; padding: 7px 10px; font-size: 12px; }
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.stat-card {
+  background: var(--surface); border-radius: var(--radius); padding: 14px 16px;
+  box-shadow: var(--shadow); border: 1px solid var(--border); position: relative; overflow: hidden;
+  transition: transform 0.15s;
+}
+.stat-card:active { transform: scale(0.97); }
+.stat-card::before { content: ''; position: absolute; top: -10px; right: -10px; width: 60px; height: 60px; border-radius: 50%; opacity: 0.08; }
+.stat-card.blue::before { background: var(--primary); }
+.stat-card.green::before { background: var(--success); }
+.stat-card.amber::before { background: var(--accent); }
+.stat-card.red::before { background: var(--danger); }
+.stat-icon { font-size: 20px; margin-bottom: 6px; }
+.stat-label { font-size: 11px; color: var(--text2); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-value { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 20px; margin-top: 2px; }
+.stat-value.blue { color: var(--primary); }
+.stat-value.green { color: var(--success); }
+.stat-value.amber { color: var(--accent); }
+.stat-value.red { color: var(--danger); }
 
-  /* MODAL */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 1000;
-    align-items: flex-end; padding: 0;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface); width: 100%; border-radius: 20px 20px 0 0; padding: 20px 18px;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
-    max-height: 92vh; overflow-y: auto;
-    animation: slideUp 0.25s ease-out;
-  }
-  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  .modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
-  .modal-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; margin-bottom: 16px; }
-  .modal-close { float: right; background: none; border: none; color: var(--text2); font-size: 22px; cursor: pointer; margin-top: -4px; }
+/* BADGES */
+.badge { display: inline-flex; align-items: center; border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700; white-space: nowrap; gap: 4px; }
+.badge-ok { background: var(--success-light); color: var(--success); }
+.badge-warn { background: var(--warn-light); color: var(--warn); }
+.badge-danger { background: var(--danger-light); color: var(--danger); }
+.badge-vacant { background: #F1F5F9; color: var(--text3); }
+.badge-info { background: var(--primary-light); color: var(--primary); }
+.badge-purple { background: var(--purple-light); color: var(--purple); }
 
-  /* FORM */
-  .form-group { margin-bottom: 14px; }
-  label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-  input, select, textarea {
-    width: 100%; padding: 11px 14px; border-radius: var(--radius-sm);
-    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
-    font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none;
-    transition: border-color 0.2s; -webkit-appearance: none;
-  }
-  input:focus, select:focus { border-color: var(--accent); }
-  textarea { resize: vertical; min-height: 70px; }
-  select option { background: var(--surface2); }
+/* APT CARDS */
+.apt-card {
+  background: var(--surface); border-radius: var(--radius); margin-bottom: 12px;
+  box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+.apt-card:active { transform: scale(0.99); }
+.apt-header { display: flex; align-items: center; gap: 12px; padding: 14px 14px 12px; cursor: pointer; }
+.apt-num {
+  width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 16px; flex-shrink: 0;
+  color: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+.apt-info { flex: 1; min-width: 0; }
+.apt-name { font-weight: 800; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.apt-tenant { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+.apt-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+.apt-loyer { font-weight: 800; font-size: 14px; color: var(--text); }
+.apt-chevron { color: var(--text3); transition: transform 0.25s; font-size: 16px; }
+.apt-chevron.open { transform: rotate(180deg); }
 
-  /* SUMMARY STATS */
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
-  .stat-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
-  .stat-value { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; margin-top: 4px; }
-  .stat-value.green { color: var(--success); }
-  .stat-value.amber { color: var(--warn); }
-  .stat-value.red { color: var(--danger); }
-  .stat-value.gold { color: var(--accent); }
+/* APT DETAIL */
+.apt-detail { display: none; border-top: 1px solid var(--border); background: var(--surface2); }
+.apt-detail.open { display: block; animation: slideDown 0.2s ease; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+.detail-inner { padding: 14px; }
 
-  /* HISTORY VIEW */
-  .hist-entry { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 8px; }
-  .hist-top { display: flex; justify-content: space-between; align-items: center; }
-  .hist-apt { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 13px; }
-  .hist-date { font-size: 12px; color: var(--text2); }
-  .hist-action { font-size: 12px; color: var(--text2); margin-top: 2px; }
-  .hist-amount { font-size: 14px; font-weight: 600; }
+/* MONTH GRID */
+.months-title { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.months-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin-bottom: 14px; }
+.month-cell {
+  border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 6px 2px; cursor: pointer; transition: all 0.15s; border: 1.5px solid transparent;
+  font-size: 9px; gap: 2px;
+}
+.month-cell .mo { font-weight: 700; font-size: 9px; }
+.month-cell .amt { font-weight: 800; font-size: 9px; }
+.month-cell.paid { background: var(--success-light); border-color: rgba(16,185,129,0.3); }
+.month-cell.paid .mo { color: var(--success); } .month-cell.paid .amt { color: var(--success); }
+.month-cell.partial { background: var(--warn-light); border-color: rgba(249,115,22,0.3); }
+.month-cell.partial .mo { color: var(--warn); } .month-cell.partial .amt { color: var(--warn); }
+.month-cell.unpaid { background: var(--danger-light); border-color: rgba(239,68,68,0.3); }
+.month-cell.unpaid .mo { color: var(--danger); } .month-cell.unpaid .amt { color: var(--danger); }
+.month-cell.future { background: #F8FAFF; border-color: var(--border); opacity: 0.6; cursor: default; }
+.month-cell.future .mo, .month-cell.future .amt { color: var(--text3); }
+.month-cell.na { background: #F8FAFF; border-color: transparent; cursor: default; opacity: 0.4; }
+.month-cell.na .mo { color: var(--text3); } .month-cell.na .amt { color: var(--text3); }
+.month-cell:active:not(.future):not(.na) { transform: scale(0.9); }
 
-  /* INCREASE ALERT */
-  .increase-alert { background: rgba(212,168,83,0.08); border: 1px solid rgba(212,168,83,0.3); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 12px; display: flex; gap: 10px; align-items: flex-start; }
-  .increase-alert svg { flex-shrink: 0; margin-top: 2px; color: var(--accent); }
-  .increase-alert-text { font-size: 13px; }
-  .increase-alert-title { font-weight: 600; color: var(--accent); margin-bottom: 2px; }
+/* DETAIL ROWS */
+.detail-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.detail-row:last-child { border-bottom: none; }
+.detail-label { font-size: 12px; color: var(--text2); font-weight: 600; }
+.detail-value { font-size: 13px; font-weight: 700; text-align: right; max-width: 60%; }
 
-  /* YEAR SELECTOR */
-  .year-selector { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; scrollbar-width: none; }
-  .year-selector::-webkit-scrollbar { display: none; }
-  .year-pill { padding: 6px 16px; border-radius: 20px; background: var(--surface2); border: 1px solid var(--border); color: var(--text2); font-size: 13px; font-weight: 500; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
-  .year-pill.active { background: var(--accent); border-color: var(--accent); color: #1a1000; font-weight: 700; }
+/* BUTTONS */
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn {
+  flex: 1; min-width: 0; padding: 11px 14px; border-radius: 12px; border: none;
+  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.96); }
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+.btn-success { background: linear-gradient(135deg, #10B981, #059669); color: #fff; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+.btn-danger { background: var(--danger-light); color: var(--danger); border: 1.5px solid rgba(239,68,68,0.2); }
+.btn-secondary { background: var(--surface); color: var(--text); border: 1.5px solid var(--border); }
+.btn-purple { background: var(--purple-light); color: var(--purple); border: 1.5px solid rgba(139,92,246,0.2); }
+.btn-amber { background: var(--accent-light); color: var(--accent); border: 1.5px solid rgba(245,158,11,0.2); }
+.btn-sm { flex: none; padding: 8px 12px; font-size: 12px; }
+.btn-full { flex: none; width: 100%; }
 
-  /* SECTION TITLE */
-  .section-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+/* ALERT CARD */
+.alert-card {
+  border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
+  display: flex; gap: 12px; align-items: flex-start;
+  box-shadow: var(--shadow);
+}
+.alert-amber { background: linear-gradient(135deg, #FEF3C7, #FDE68A); border: 1px solid rgba(245,158,11,0.3); }
+.alert-blue { background: linear-gradient(135deg, var(--primary-light), #DBEAFE); border: 1px solid rgba(37,99,235,0.2); }
+.alert-icon { font-size: 22px; flex-shrink: 0; }
+.alert-title { font-weight: 800; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+.alert-body { font-size: 12px; color: var(--text2); }
 
-  /* RELIQUAT */
-  .reliq-chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-top: 4px; }
-  .reliq-positive { background: rgba(224,92,92,0.1); color: var(--danger); border: 1px solid rgba(224,92,92,0.2); }
-  .reliq-negative { background: rgba(92,191,138,0.1); color: var(--success); border: 1px solid rgba(92,191,138,0.2); }
+/* YEAR SELECTOR */
+.year-selector { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; scrollbar-width: none; }
+.year-selector::-webkit-scrollbar { display: none; }
+.year-pill {
+  padding: 7px 18px; border-radius: 20px; background: var(--surface);
+  border: 1.5px solid var(--border); color: var(--text2); font-size: 13px; font-weight: 700;
+  cursor: pointer; flex-shrink: 0; transition: all 0.15s;
+}
+.year-pill.active { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 4px 10px rgba(37,99,235,0.3); }
 
-  /* SEPARATOR */
-  .sep { height: 1px; background: var(--border); margin: 14px 0; }
+/* MODAL */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.5); z-index: 1000;
+  align-items: flex-end; backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface); width: 100%; border-radius: 24px 24px 0 0; padding: 8px 18px 20px;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
+  max-height: 92vh; overflow-y: auto;
+  animation: slideUp 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.15);
+}
+@keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 10px auto 14px; }
+.modal-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 20px; margin-bottom: 16px; color: var(--text); }
+.modal-close { float: right; background: var(--surface2); border: none; color: var(--text2); font-size: 16px; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: -2px; }
 
-  /* Toast */
-  #toast {
-    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: #333; color: var(--text); padding: 10px 20px; border-radius: 24px;
-    font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 9999; pointer-events: none;
-    white-space: nowrap;
-  }
-  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+/* FORM */
+.form-group { margin-bottom: 14px; }
+label { display: block; font-size: 11px; color: var(--text2); margin-bottom: 5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+input, select, textarea {
+  width: 100%; padding: 12px 14px; border-radius: var(--radius-sm);
+  background: var(--surface2); border: 1.5px solid var(--border); color: var(--text);
+  font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+select option { background: #fff; font-weight: 600; }
+textarea { resize: vertical; min-height: 70px; }
 
-  /* Scrollbar */
-  #main::-webkit-scrollbar { display: none; }
+/* SEPARATOR */
+.sep { height: 1px; background: var(--border); margin: 14px 0; }
+.sep-label { text-align: center; position: relative; margin: 16px 0; }
+.sep-label::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
+.sep-label span { background: var(--surface); padding: 0 12px; font-size: 11px; color: var(--text3); font-weight: 700; position: relative; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* TENANT FILE VIEW */
+.tenant-card {
+  background: var(--surface); border-radius: var(--radius); margin-bottom: 12px;
+  box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden;
+}
+.tenant-header {
+  padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer;
+}
+.tenant-avatar {
+  width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 18px; color: #fff; flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+.tenant-info { flex: 1; min-width: 0; }
+.tenant-name { font-weight: 800; font-size: 15px; }
+.tenant-apt { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.tenant-detail { display: none; border-top: 1px solid var(--border); padding: 14px; background: var(--surface2); }
+.tenant-detail.open { display: block; animation: slideDown 0.2s ease; }
+
+/* DOCUMENTS */
+.doc-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.doc-item {
+  display: flex; align-items: center; gap: 10px; background: var(--surface);
+  border: 1.5px solid var(--border); border-radius: 12px; padding: 10px 12px;
+  cursor: pointer; transition: all 0.15s;
+}
+.doc-item:active { transform: scale(0.98); }
+.doc-icon { font-size: 24px; flex-shrink: 0; }
+.doc-info { flex: 1; min-width: 0; }
+.doc-name { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.doc-meta { font-size: 11px; color: var(--text2); }
+.doc-del { background: none; border: none; color: var(--danger); font-size: 18px; cursor: pointer; padding: 4px; flex-shrink: 0; }
+.doc-type-bail { border-color: rgba(37,99,235,0.3); background: var(--primary-light); }
+.doc-type-piece { border-color: rgba(139,92,246,0.3); background: var(--purple-light); }
+.doc-type-photo { border-color: rgba(236,72,153,0.3); background: var(--pink-light); }
+
+/* FILE UPLOAD ZONE */
+.upload-zone {
+  border: 2px dashed var(--border); border-radius: 14px; padding: 20px; text-align: center;
+  cursor: pointer; transition: all 0.2s; background: var(--surface2);
+}
+.upload-zone:active { border-color: var(--primary); background: var(--primary-light); }
+.upload-zone-icon { font-size: 32px; margin-bottom: 8px; }
+.upload-zone-text { font-size: 13px; font-weight: 700; color: var(--text2); }
+.upload-zone-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+/* HISTORY */
+.hist-item { background: var(--surface); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; border-left: 4px solid var(--primary); box-shadow: var(--shadow); }
+.hist-top { display: flex; justify-content: space-between; }
+.hist-apt { font-weight: 800; font-size: 13px; color: var(--primary); }
+.hist-date { font-size: 11px; color: var(--text3); }
+.hist-action { font-size: 12px; color: var(--text2); margin-top: 3px; }
+
+/* RECAP TABLE */
+.recap-row { background: var(--surface); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.recap-top { display: flex; justify-content: space-between; align-items: center; }
+.recap-name { font-weight: 800; font-size: 13px; }
+.recap-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.recap-amount { font-weight: 900; font-size: 15px; }
+
+/* WELCOME BANNER */
+.welcome-banner {
+  background: linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%);
+  border-radius: var(--radius); padding: 18px; margin-bottom: 16px;
+  color: #fff; position: relative; overflow: hidden;
+  box-shadow: 0 8px 24px rgba(37,99,235,0.3);
+}
+.welcome-banner::after { content: '🏘'; position: absolute; right: 16px; bottom: -4px; font-size: 52px; opacity: 0.2; }
+.welcome-date { font-size: 11px; opacity: 0.8; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.welcome-text { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-top: 4px; }
+.welcome-sub { font-size: 12px; opacity: 0.8; margin-top: 3px; }
+
+/* TOAST */
+#toast {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--text); color: #fff; padding: 11px 22px; border-radius: 28px;
+  font-size: 13px; font-weight: 700; opacity: 0; transition: all 0.3s; z-index: 9999;
+  pointer-events: none; white-space: nowrap; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* COLOR PALETTE FOR APARTMENTS */
+.color-0 { background: linear-gradient(135deg, #2563EB, #0EA5E9); }
+.color-1 { background: linear-gradient(135deg, #10B981, #059669); }
+.color-2 { background: linear-gradient(135deg, #F59E0B, #EF4444); }
+.color-3 { background: linear-gradient(135deg, #8B5CF6, #EC4899); }
+.color-4 { background: linear-gradient(135deg, #0EA5E9, #06B6D4); }
+.color-5 { background: linear-gradient(135deg, #F97316, #F59E0B); }
+.color-6 { background: linear-gradient(135deg, #EF4444, #EC4899); }
+.color-7 { background: linear-gradient(135deg, #6366F1, #8B5CF6); }
+.color-8 { background: linear-gradient(135deg, #14B8A6, #10B981); }
+.color-9 { background: linear-gradient(135deg, #EC4899, #F97316); }
+.color-10 { background: linear-gradient(135deg, #0EA5E9, #2563EB); }
+.color-11 { background: linear-gradient(135deg, #10B981, #6366F1); }
+.color-12 { background: linear-gradient(135deg, #F59E0B, #10B981); }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state p { font-weight: 700; font-size: 14px; }
+
+/* SEARCH BAR */
+.search-bar {
+  display: flex; align-items: center; background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 0 14px; gap: 10px; margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+.search-bar svg { color: var(--text3); flex-shrink: 0; }
+.search-bar input { border: none; background: none; padding: 12px 0; flex: 1; font-size: 14px; box-shadow: none; }
+.search-bar input:focus { box-shadow: none; border: none; }
+
+/* PROGRESS BAR */
+.progress-wrap { background: var(--border); border-radius: 10px; height: 8px; overflow: hidden; margin-top: 6px; }
+.progress-bar { height: 100%; border-radius: 10px; transition: width 0.5s ease; }
+
+/* TAG */
+.tag { display: inline-flex; align-items: center; gap: 4px; background: var(--primary-light); color: var(--primary); border-radius: 8px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
 </style>
 </head>
 <body>
 <div id="app">
   <div id="header">
     <div class="header-logo">
-      PolyDeco
-      <span>Gestion Locative — Taghzaoui</span>
+      TAGHZAOUI
+      <span>Gestion Locative</span>
     </div>
-    <div id="header-year" style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:18px;"></div>
+    <div class="header-badge" id="header-month-badge"></div>
   </div>
 
   <div id="main">
-    <!-- VUE TABLEAU DE BORD -->
+    <!-- TABLEAU DE BORD -->
     <div class="view active" id="view-dashboard">
-      <div style="height:12px"></div>
+      <div style="height:4px"></div>
+      <div class="welcome-banner" id="welcome-banner"></div>
       <div class="stats-grid" id="stats-grid"></div>
-      <div class="section-title">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Augmentations dues
-      </div>
-      <div id="increase-alerts"></div>
-      <div class="section-title" style="margin-top:4px;">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Mois en cours
-      </div>
+      <div class="section-title"><div class="dot"></div>Alertes</div>
+      <div id="alerts-zone"></div>
+      <div class="section-title" style="margin-top:8px"><div class="dot" style="background:var(--success)"></div>Ce mois — <span id="dash-month-label" style="color:var(--text2);font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;"></span></div>
       <div id="current-month-list"></div>
     </div>
 
-    <!-- VUE APPARTEMENTS -->
+    <!-- APPARTEMENTS -->
     <div class="view" id="view-apts">
-      <div style="height:12px"></div>
+      <div style="height:4px"></div>
       <div class="year-selector" id="year-tabs-apts"></div>
+      <div class="search-bar">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-apts" placeholder="Rechercher un appartement..." oninput="renderApts()">
+      </div>
       <div id="apts-list"></div>
     </div>
 
-    <!-- VUE HISTORIQUE / STATS -->
+    <!-- LOCATAIRES -->
+    <div class="view" id="view-tenants">
+      <div style="height:4px"></div>
+      <div class="search-bar">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-tenants" placeholder="Rechercher un locataire..." oninput="renderTenants()">
+      </div>
+      <div id="tenants-list"></div>
+    </div>
+
+    <!-- STATS -->
     <div class="view" id="view-stats">
-      <div style="height:12px"></div>
+      <div style="height:4px"></div>
       <div class="year-selector" id="year-tabs-stats"></div>
       <div class="stats-grid" id="stats-year-grid"></div>
-      <div class="section-title">Récapitulatif annuel</div>
+      <div class="section-title"><div class="dot"></div>Récapitulatif par appartement</div>
       <div id="year-recap-list"></div>
     </div>
 
-    <!-- VUE PARAMETRES -->
+    <!-- PARAMETRES -->
     <div class="view" id="view-settings">
-      <div style="height:12px"></div>
-      <div class="section-title">Paramètres</div>
-      <div class="apt-card" style="padding:16px;">
-        <div style="font-size:13px;color:var(--text2);margin-bottom:10px;">Export / Import des données</div>
+      <div style="height:4px"></div>
+      <div class="section-title"><div class="dot"></div>Données</div>
+      <div class="apt-card" style="padding:16px;margin-bottom:12px;">
+        <div style="font-size:13px;color:var(--text2);font-weight:600;margin-bottom:12px;">Sauvegarder ou restaurer toutes vos données (loyers, locataires, documents)</div>
         <div class="btn-row">
-          <button class="btn btn-secondary" onclick="exportData()">
-            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Exporter JSON
-          </button>
-          <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">
-            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            Importer JSON
-          </button>
+          <button class="btn btn-primary" onclick="exportData()">⬇️ Exporter JSON</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">⬆️ Importer JSON</button>
         </div>
         <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
       </div>
-      <div class="sep"></div>
-      <div class="section-title">À propos</div>
-      <div class="apt-card" style="padding:16px;font-size:13px;color:var(--text2);line-height:1.7;">
-        <b style="color:var(--text)">PolyDeco Gestion Locative</b><br>
-        Application locale — fonctionne sans connexion<br>
-        Données stockées dans votre navigateur (localStorage)<br><br>
-        <span style="color:var(--accent)">Règle d'augmentation :</span> +10% tous les 3 ans à compter de la date d'entrée du locataire.
+      <div class="section-title"><div class="dot" style="background:var(--accent)"></div>À propos</div>
+      <div class="apt-card" style="padding:16px;">
+        <div style="font-size:14px;line-height:1.8;">
+          <strong style="font-size:16px;">TAGHZAOUI Gestion Locative</strong><br>
+          <span style="color:var(--text2);">Application locale — fonctionne sans connexion<br>
+          Données stockées dans votre navigateur<br><br>
+          <span style="color:var(--accent);font-weight:700;">📈 Règle d'augmentation :</span><br>
+          +10% automatique tous les 3 ans à compter de la date d'entrée du locataire.<br><br>
+          <span style="color:var(--primary);font-weight:700;">📎 Documents supportés :</span><br>
+          PDF, images, Word, tout type de fichier (stocké en base64 dans le navigateur)</span>
+        </div>
       </div>
     </div>
   </div>
 
   <div id="bottomnav">
     <button class="nav-btn active" id="nav-dashboard" onclick="switchView('dashboard')">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      Tableau
+      <div class="nav-icon-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      Accueil
     </button>
     <button class="nav-btn" id="nav-apts" onclick="switchView('apts')">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <div class="nav-icon-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
       Apparts
     </button>
+    <button class="nav-btn" id="nav-tenants" onclick="switchView('tenants')">
+      <div class="nav-icon-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      Locataires
+    </button>
     <button class="nav-btn" id="nav-stats" onclick="switchView('stats')">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <div class="nav-icon-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
       Stats
     </button>
     <button class="nav-btn" id="nav-settings" onclick="switchView('settings')">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <div class="nav-icon-wrap"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
       Réglages
     </button>
   </div>
 </div>
 
 <!-- MODAL PAIEMENT -->
-<div class="modal-overlay" id="modal-payment">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <button class="modal-close" onclick="closeModal('modal-payment')">✕</button>
-    <div class="modal-title" id="modal-payment-title">Paiement</div>
-    <div id="modal-payment-body"></div>
-  </div>
-</div>
+<div class="modal-overlay" id="modal-payment"><div class="modal">
+  <div class="modal-handle"></div>
+  <button class="modal-close" onclick="closeModal('modal-payment')">✕</button>
+  <div class="modal-title" id="modal-payment-title"></div>
+  <div id="modal-payment-body"></div>
+</div></div>
 
 <!-- MODAL EDIT APT -->
-<div class="modal-overlay" id="modal-apt-edit">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <button class="modal-close" onclick="closeModal('modal-apt-edit')">✕</button>
-    <div class="modal-title" id="modal-apt-edit-title">Modifier appartement</div>
-    <div id="modal-apt-edit-body"></div>
-  </div>
-</div>
+<div class="modal-overlay" id="modal-apt-edit"><div class="modal">
+  <div class="modal-handle"></div>
+  <button class="modal-close" onclick="closeModal('modal-apt-edit')">✕</button>
+  <div class="modal-title" id="modal-apt-edit-title"></div>
+  <div id="modal-apt-edit-body"></div>
+</div></div>
 
 <!-- MODAL NOUVEAU LOCATAIRE -->
-<div class="modal-overlay" id="modal-new-tenant">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <button class="modal-close" onclick="closeModal('modal-new-tenant')">✕</button>
-    <div class="modal-title">Nouveau locataire</div>
-    <div id="modal-new-tenant-body"></div>
-  </div>
-</div>
+<div class="modal-overlay" id="modal-new-tenant"><div class="modal">
+  <div class="modal-handle"></div>
+  <button class="modal-close" onclick="closeModal('modal-new-tenant')">✕</button>
+  <div class="modal-title">Nouveau locataire</div>
+  <div id="modal-new-tenant-body"></div>
+</div></div>
 
-<!-- TOAST -->
+<!-- MODAL FICHE LOCATAIRE -->
+<div class="modal-overlay" id="modal-tenant-file"><div class="modal">
+  <div class="modal-handle"></div>
+  <button class="modal-close" onclick="closeModal('modal-tenant-file')">✕</button>
+  <div class="modal-title" id="modal-tenant-title"></div>
+  <div id="modal-tenant-body"></div>
+</div></div>
+
+<!-- MODAL DOCUMENT VIEWER -->
+<div class="modal-overlay" id="modal-doc-viewer"><div class="modal">
+  <div class="modal-handle"></div>
+  <button class="modal-close" onclick="closeModal('modal-doc-viewer')">✕</button>
+  <div class="modal-title" id="modal-doc-title"></div>
+  <div id="modal-doc-body"></div>
+</div></div>
+
 <div id="toast"></div>
 
 <script>
-// ============================================================
-// DONNÉES INITIALES (extraites du fichier Excel)
-// ============================================================
-const INITIAL_DATA = {
-  apartments: [
-    { id: 1, name: "Zerhounia RDC",       tenant: "Amine BEN AIZ MOHAMED",     entryDate: "2022-10-01", loyer: 1500, obs: "Paiement début de mois", vacant: false },
-    { id: 2, name: "Zerhounia R+1",       tenant: "GHANNAB Khadija / JAMALI Oumaima", entryDate: "2022-10-01", loyer: 1500, obs: "Paiement début de mois", vacant: false },
-    { id: 3, name: "Zerhounia R+2",       tenant: "EL ARABI Ossama",           entryDate: "2025-10-01", loyer: 1500, obs: "Paiement début de mois", vacant: false },
-    { id: 4, name: "Apt L'ERAC",          tenant: "AKKA Zineb",                entryDate: "2024-09-01", loyer: 1400, obs: "Paiement fin de mois",   vacant: false },
-    { id: 5, name: "RABAT Local 1 (Lavage)", tenant: "MAKHOUKI Hind",          entryDate: "2022-11-01", loyer: 2750, obs: "Paiement début de mois — loyer 2026 à définir", vacant: false },
-    { id: 6, name: "RABAT Local 2",       tenant: "",                          entryDate: "2025-01-01", loyer: 0,    obs: "",                       vacant: true },
-    { id: 7, name: "RABAT Studio RDC",    tenant: "",                          entryDate: "2025-01-01", loyer: 0,    obs: "",                       vacant: true },
-    { id: 8, name: "RABAT R+1 Apt",       tenant: "Tahar",                     entryDate: "2022-09-01", loyer: 1500, obs: "Paiement début de mois", vacant: false },
-    { id: 9, name: "RABAT R+1 Studio",    tenant: "JANATI Rachida",            entryDate: "2024-08-06", loyer: 1350, obs: "Paiement début de mois", vacant: false },
-    { id: 10, name: "RABAT R+2",          tenant: "",                          entryDate: "2025-01-01", loyer: 2000, obs: "",                       vacant: false },
-    { id: 11, name: "RABAT R+3",          tenant: "BOUTALEB Siham",            entryDate: "2024-08-06", loyer: 2000, obs: "Paiement début de mois", vacant: false },
-    { id: 12, name: "RABAT Apt Maman 1",  tenant: "TIAICHT Brahim",            entryDate: "2022-09-01", loyer: 1400, obs: "Paiement début de mois", vacant: false },
-    { id: 13, name: "RABAT Apt Maman 2",  tenant: "RAHALI Ilham",              entryDate: "2022-09-01", loyer: 1400, obs: "Paiement début de mois — reliquat à vérifier", vacant: false },
-  ],
-  payments: {}, // { "aptId-YYYY-MM": { paid: number, reliquat: number, note: "" } }
-  history: []
-};
+// =====================================================
+// INITIAL DATA
+// =====================================================
+const INITIAL_APARTMENTS = [
+  { id:1,  name:"Zerhounia RDC",          tenant:"Amine BEN AIZ MOHAMED",          entryDate:"2022-10-01", loyer:1500, obs:"Paiement début de mois", vacant:false },
+  { id:2,  name:"Zerhounia R+1",          tenant:"GHANNAB Khadija / JAMALI Oumaima",entryDate:"2022-10-01", loyer:1500, obs:"Paiement début de mois", vacant:false },
+  { id:3,  name:"Zerhounia R+2",          tenant:"EL ARABI Ossama",                entryDate:"2025-10-01", loyer:1500, obs:"Paiement début de mois", vacant:false },
+  { id:4,  name:"Apt L'ERAC",             tenant:"AKKA Zineb",                     entryDate:"2024-09-01", loyer:1400, obs:"Paiement fin de mois",   vacant:false },
+  { id:5,  name:"RABAT Local 1 (Lavage)", tenant:"MAKHOUKI Hind",                  entryDate:"2022-11-01", loyer:2750, obs:"Loyer 2026 à définir",   vacant:false },
+  { id:6,  name:"RABAT Local 2",          tenant:"",                               entryDate:"2025-01-01", loyer:0,    obs:"",                       vacant:true  },
+  { id:7,  name:"RABAT Studio RDC",       tenant:"",                               entryDate:"2025-01-01", loyer:0,    obs:"",                       vacant:true  },
+  { id:8,  name:"RABAT R+1 Apt",          tenant:"Tahar",                          entryDate:"2022-09-01", loyer:1500, obs:"Paiement début de mois", vacant:false },
+  { id:9,  name:"RABAT R+1 Studio",       tenant:"JANATI Rachida",                 entryDate:"2024-08-06", loyer:1350, obs:"Paiement début de mois", vacant:false },
+  { id:10, name:"RABAT R+2",              tenant:"",                               entryDate:"2025-01-01", loyer:2000, obs:"",                       vacant:false },
+  { id:11, name:"RABAT R+3",              tenant:"BOUTALEB Siham",                 entryDate:"2024-08-06", loyer:2000, obs:"Paiement début de mois", vacant:false },
+  { id:12, name:"RABAT Apt Maman 1",      tenant:"TIAICHT Brahim",                 entryDate:"2022-09-01", loyer:1400, obs:"Paiement début de mois", vacant:false },
+  { id:13, name:"RABAT Apt Maman 2",      tenant:"RAHALI Ilham",                   entryDate:"2022-09-01", loyer:1400, obs:"Reliquat à vérifier",    vacant:false },
+];
 
-// Paiements 2025 réels extraits du tableur (sheet 2025)
 const PAYMENTS_2025 = {
-  "1-2025-01": 0, "1-2025-02": 0, "1-2025-03": 0, "1-2025-04": 0, "1-2025-05": 0,
-  "1-2025-06": 1250, "1-2025-07": 1250, "1-2025-08": 1250, "1-2025-09": 1250, "1-2025-10": 1500,
-  "2-2025-01": 1400, "2-2025-02": 900, "2-2025-03": 1900, "2-2025-04": 1400, "2-2025-05": 1100,
-  "2-2025-06": 1700, "2-2025-07": 1400, "2-2025-08": 1400, "2-2025-09": 1400, "2-2025-10": 1500, "2-2025-11": 1000,
-  "4-2025-01": 1400, "4-2025-02": 1400, "4-2025-03": 1400, "4-2025-04": 1400, "4-2025-05": 1400,
-  "4-2025-06": 1400, "4-2025-07": 1400, "4-2025-08": 1400, "4-2025-09": 1400, "4-2025-10": 1400,
-  "5-2025-01": 2750, "5-2025-02": 2750, "5-2025-03": 2750, "5-2025-04": 2750, "5-2025-05": 2750,
-  "5-2025-06": 2750, "5-2025-07": 2750, "5-2025-08": 2750, "5-2025-09": 2750, "5-2025-10": 2750,
-  "8-2025-01": 1200, "8-2025-02": 1200, "8-2025-03": 1200, "8-2025-04": 1200, "8-2025-05": 1200,
-  "8-2025-06": 1200, "8-2025-07": 1200, "8-2025-08": 1200, "8-2025-09": 1500,
-  "9-2025-01": 1350, "9-2025-02": 1350, "9-2025-03": 1350, "9-2025-04": 1350, "9-2025-05": 1350,
-  "9-2025-06": 1350, "9-2025-07": 1350, "9-2025-08": 1350, "9-2025-09": 1350, "9-2025-10": 1350, "9-2025-11": 1350,
-  "10-2025-01": 2000, "10-2025-02": 2000, "10-2025-03": 2000, "10-2025-04": 2000, "10-2025-05": 2000,
-  "10-2025-06": 2000, "10-2025-07": 2000, "10-2025-08": 2000, "10-2025-09": 2000,
-  "11-2025-01": 2000, "11-2025-02": 2000, "11-2025-03": 2000, "11-2025-04": 2000, "11-2025-05": 2000,
-  "11-2025-06": 2000, "11-2025-07": 2000, "11-2025-08": 2000, "11-2025-09": 2000, "11-2025-10": 2000,
-  "12-2025-01": 1300, "12-2025-02": 1300, "12-2025-03": 1300, "12-2025-04": 1300, "12-2025-05": 1300,
-  "12-2025-06": 1300, "12-2025-07": 1300, "12-2025-08": 1300, "12-2025-09": 1400, "12-2025-10": 1400, "12-2025-11": 1400,
-  "13-2025-11": 1500,
+  "1-2025-06":1250,"1-2025-07":1250,"1-2025-08":1250,"1-2025-09":1250,"1-2025-10":1500,
+  "2-2025-01":1400,"2-2025-02":900,"2-2025-03":1900,"2-2025-04":1400,"2-2025-05":1100,
+  "2-2025-06":1700,"2-2025-07":1400,"2-2025-08":1400,"2-2025-09":1400,"2-2025-10":1500,"2-2025-11":1000,
+  "4-2025-01":1400,"4-2025-02":1400,"4-2025-03":1400,"4-2025-04":1400,"4-2025-05":1400,
+  "4-2025-06":1400,"4-2025-07":1400,"4-2025-08":1400,"4-2025-09":1400,"4-2025-10":1400,
+  "5-2025-01":2750,"5-2025-02":2750,"5-2025-03":2750,"5-2025-04":2750,"5-2025-05":2750,
+  "5-2025-06":2750,"5-2025-07":2750,"5-2025-08":2750,"5-2025-09":2750,"5-2025-10":2750,
+  "8-2025-01":1200,"8-2025-02":1200,"8-2025-03":1200,"8-2025-04":1200,"8-2025-05":1200,
+  "8-2025-06":1200,"8-2025-07":1200,"8-2025-08":1200,"8-2025-09":1500,
+  "9-2025-01":1350,"9-2025-02":1350,"9-2025-03":1350,"9-2025-04":1350,"9-2025-05":1350,
+  "9-2025-06":1350,"9-2025-07":1350,"9-2025-08":1350,"9-2025-09":1350,"9-2025-10":1350,"9-2025-11":1350,
+  "10-2025-01":2000,"10-2025-02":2000,"10-2025-03":2000,"10-2025-04":2000,"10-2025-05":2000,
+  "10-2025-06":2000,"10-2025-07":2000,"10-2025-08":2000,"10-2025-09":2000,
+  "11-2025-01":2000,"11-2025-02":2000,"11-2025-03":2000,"11-2025-04":2000,"11-2025-05":2000,
+  "11-2025-06":2000,"11-2025-07":2000,"11-2025-08":2000,"11-2025-09":2000,"11-2025-10":2000,
+  "12-2025-01":1300,"12-2025-02":1300,"12-2025-03":1300,"12-2025-04":1300,"12-2025-05":1300,
+  "12-2025-06":1300,"12-2025-07":1300,"12-2025-08":1300,"12-2025-09":1400,"12-2025-10":1400,"12-2025-11":1400,
+  "13-2025-11":1500,
 };
 
-// ============================================================
-// STATE & STORAGE
-// ============================================================
+// =====================================================
+// STATE
+// =====================================================
 let state = {};
-const STORE_KEY = "polydeco_gestion_v2";
+const STORE_KEY = "taghzaoui_gestion_v3";
 const now = new Date();
 let currentYear = now.getFullYear();
 let statsYear = now.getFullYear();
+let openAptId = null;
+let openTenantId = null;
+
+const MONTHS_SHORT = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+const MONTHS_LONG  = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const DAYS_FR = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
 
 function loadState() {
   try {
     const raw = localStorage.getItem(STORE_KEY);
     if (raw) {
       state = JSON.parse(raw);
-      // Migration: ensure apartments have all fields
-      state.apartments.forEach(a => {
-        if (!a.hasOwnProperty('reliquat')) a.reliquat = 0;
-      });
+      if (!state.tenants) state.tenants = {};
+      if (!state.documents) state.documents = {};
+      if (!state.history) state.history = [];
     } else {
-      state = JSON.parse(JSON.stringify(INITIAL_DATA));
-      // Inject 2025 payments
+      state = { apartments: JSON.parse(JSON.stringify(INITIAL_APARTMENTS)), payments: {}, tenants: {}, documents: {}, history: [] };
       for (const [k, v] of Object.entries(PAYMENTS_2025)) {
         if (v > 0) {
-          const [aptId, y, m] = k.split('-');
-          const key = `${aptId}-${y}-${m}`;
-          const apt = state.apartments.find(a => a.id == aptId);
-          if (apt) {
-            state.payments[key] = { paid: v, reliquat: 0, note: "" };
-          }
+          const parts = k.split('-');
+          const aptId = parts[0], y = parts[1], m = parts[2];
+          state.payments[`${aptId}-${y}-${m}`] = { paid: v, reliquat: 0, note: "" };
         }
       }
+      // Init tenant records
+      state.apartments.forEach(a => {
+        if (!a.vacant && a.tenant) initTenantRecord(a);
+      });
       saveState();
     }
-  } catch(e) { state = JSON.parse(JSON.stringify(INITIAL_DATA)); }
+  } catch(e) {
+    state = { apartments: JSON.parse(JSON.stringify(INITIAL_APARTMENTS)), payments: {}, tenants: {}, documents: {}, history: [] };
+  }
+}
+
+function initTenantRecord(apt) {
+  if (!state.tenants[apt.id]) {
+    state.tenants[apt.id] = {
+      nom: apt.tenant,
+      tel: '', email: '', cin: '', profession: '',
+      entryDate: apt.entryDate,
+      notes: apt.obs || '',
+      aptId: apt.id
+    };
+  }
+  if (!state.documents[apt.id]) state.documents[apt.id] = [];
 }
 
 function saveState() {
-  localStorage.setItem(STORE_KEY, JSON.stringify(state));
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+  catch(e) { toast('⚠️ Stockage plein — supprimez des pièces jointes'); }
 }
 
-// ============================================================
-// UTILITIES
-// ============================================================
-const MONTHS_SHORT = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-const MONTHS_LONG  = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-
+// =====================================================
+// UTILS
+// =====================================================
 function fmtMoney(v) {
-  if (!v && v !== 0) return '—';
+  if (v === null || v === undefined || isNaN(v)) return '—';
   return new Intl.NumberFormat('fr-MA').format(Math.round(v)) + ' MAD';
 }
-
 function fmtDate(d) {
   if (!d) return '—';
-  const dt = new Date(d);
-  return dt.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  return new Date(d).toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' });
 }
+function padM(m) { return String(m).padStart(2,'0'); }
+function getPayKey(id, y, m) { return `${id}-${y}-${padM(m)}`; }
+function getPayment(id, y, m) { return state.payments[getPayKey(id,y,m)] || { paid:0, reliquat:0, note:"" }; }
 
-function padM(m) { return String(m).padStart(2, '0'); }
-
-function getPayKey(aptId, year, month) {
-  return `${aptId}-${year}-${padM(month)}`;
-}
-
-function getPayment(aptId, year, month) {
-  return state.payments[getPayKey(aptId, year, month)] || { paid: 0, reliquat: 0, note: "" };
-}
-
-function todayStr() {
-  return now.toISOString().slice(0,10);
-}
-
-// Calcul loyer effectif (avec augmentation 10% / 3 ans)
 function computeLoyer(apt, year, month) {
-  if (apt.vacant || !apt.entryDate) return apt.loyer || 0;
+  if (apt.vacant || !apt.entryDate || !apt.loyer) return 0;
   const entry = new Date(apt.entryDate);
-  const target = new Date(year, month - 1, 1);
-  if (target < entry) return 0;
-  const years = (target - entry) / (365.25 * 24 * 3600 * 1000);
+  const target = new Date(year, month-1, 1);
+  if (target < new Date(entry.getFullYear(), entry.getMonth(), 1)) return 0;
+  const years = (target - entry) / (365.25*24*3600*1000);
   const periods = Math.floor(years / 3);
   return Math.round(apt.loyer * Math.pow(1.1, periods));
 }
@@ -475,424 +646,472 @@ function computeLoyer(apt, year, month) {
 function nextIncreaseDate(apt) {
   if (!apt.entryDate || apt.vacant) return null;
   const entry = new Date(apt.entryDate);
-  const years = (now - entry) / (365.25 * 24 * 3600 * 1000);
-  const periods = Math.floor(years / 3);
-  const nextDate = new Date(entry);
-  nextDate.setFullYear(entry.getFullYear() + (periods + 1) * 3);
-  return nextDate;
+  const years = (now - entry) / (365.25*24*3600*1000);
+  const periods = Math.floor(years/3);
+  const nd = new Date(entry);
+  nd.setFullYear(entry.getFullYear() + (periods+1)*3);
+  return nd;
 }
 
 function shouldIncreaseNow(apt) {
-  const next = nextIncreaseDate(apt);
-  if (!next) return false;
-  const diff = (next - now) / (24 * 3600 * 1000);
+  const nd = nextIncreaseDate(apt);
+  if (!nd) return false;
+  const diff = (nd - now) / (24*3600*1000);
   return diff <= 30 && diff >= -7;
 }
 
-function getReliquatTotal(apt) {
-  // Sum all unpaid months up to today
+function getUnpaidTotal(apt) {
   let total = 0;
   const entry = apt.entryDate ? new Date(apt.entryDate) : null;
   for (let y = 2022; y <= now.getFullYear(); y++) {
     for (let m = 1; m <= 12; m++) {
-      if (y === now.getFullYear() && m > now.getMonth() + 1) break;
-      if (entry) {
-        const dt = new Date(y, m-1, 1);
-        if (dt < entry) continue;
-      }
-      const loyer = computeLoyer(apt, y, m);
+      if (y === now.getFullYear() && m > now.getMonth()+1) break;
+      if (entry) { const dt = new Date(y,m-1,1); if (dt < new Date(entry.getFullYear(),entry.getMonth(),1)) continue; }
+      const loyer = computeLoyer(apt,y,m);
       if (!loyer) continue;
-      const pay = getPayment(apt.id, y, m);
-      const diff = loyer - pay.paid + (pay.reliquat || 0);
+      const pay = getPayment(apt.id,y,m);
+      const diff = loyer - pay.paid + (pay.reliquat||0);
       if (diff > 0) total += diff;
     }
   }
   return total;
 }
 
-function toast(msg, dur=2200) {
+function getInitials(name) {
+  if (!name) return '?';
+  return name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+}
+
+function getDocIcon(type) {
+  if (!type) return '📎';
+  if (type.includes('pdf')) return '📄';
+  if (type.includes('image') || type.includes('png') || type.includes('jpg') || type.includes('jpeg')) return '🖼️';
+  if (type.includes('word') || type.includes('doc')) return '📝';
+  return '📎';
+}
+
+function toast(msg, dur=2400) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), dur);
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), dur);
 }
 
-// ============================================================
+function addHistory(aptId, action) {
+  if (!state.history) state.history = [];
+  const apt = state.apartments.find(a=>a.id===aptId);
+  state.history.unshift({ aptId, action, date: new Date().toISOString(), apt: apt?.name||'' });
+  if (state.history.length > 300) state.history = state.history.slice(0,300);
+}
+
+// =====================================================
 // NAVIGATION
-// ============================================================
+// =====================================================
 let currentView = 'dashboard';
 function switchView(v) {
-  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById('view-' + v).classList.add('active');
-  document.getElementById('nav-' + v).classList.add('active');
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  document.getElementById('nav-'+v).classList.add('active');
   currentView = v;
   render();
 }
 
-// ============================================================
+// =====================================================
 // RENDER
-// ============================================================
+// =====================================================
 function render() {
   renderHeader();
-  if (currentView === 'dashboard') renderDashboard();
-  else if (currentView === 'apts') renderApts();
-  else if (currentView === 'stats') renderStats();
+  if (currentView==='dashboard') renderDashboard();
+  else if (currentView==='apts') renderApts();
+  else if (currentView==='tenants') renderTenants();
+  else if (currentView==='stats') renderStats();
 }
 
 function renderHeader() {
-  document.getElementById('header-year').textContent = now.getFullYear();
+  const m = now.getMonth();
+  document.getElementById('header-month-badge').textContent = MONTHS_SHORT[m] + ' ' + now.getFullYear();
 }
 
 // -- DASHBOARD --
 function renderDashboard() {
-  const m = now.getMonth() + 1;
-  const y = now.getFullYear();
-  let totalDu = 0, totalPercu = 0, nbImpaye = 0, nbApparts = 0;
-
+  const m = now.getMonth()+1, y = now.getFullYear();
+  let totalDu=0, totalPercu=0, nbImpaye=0, nbAppts=0, nbVacant=0;
   state.apartments.forEach(apt => {
-    if (apt.vacant) return;
-    const loyer = computeLoyer(apt, y, m);
+    if (apt.vacant) { nbVacant++; return; }
+    const loyer = computeLoyer(apt,y,m);
     if (!loyer) return;
-    nbApparts++;
+    nbAppts++;
     totalDu += loyer;
-    const pay = getPayment(apt.id, y, m);
+    const pay = getPayment(apt.id,y,m);
     totalPercu += pay.paid;
     if (pay.paid < loyer) nbImpaye++;
   });
 
-  // Stats cards
+  // Welcome
+  const dayName = DAYS_FR[now.getDay()];
+  document.getElementById('welcome-banner').innerHTML = `
+    <div class="welcome-date">${dayName} ${now.getDate()} ${MONTHS_LONG[now.getMonth()]} ${now.getFullYear()}</div>
+    <div class="welcome-text">Bonjour ! 👋</div>
+    <div class="welcome-sub">${nbAppts} appartements actifs · ${nbVacant} vacant${nbVacant>1?'s':''}</div>
+  `;
+  document.getElementById('dash-month-label').textContent = MONTHS_LONG[m-1] + ' ' + y;
+
+  // Stats
+  const taux = totalDu > 0 ? Math.round(totalPercu/totalDu*100) : 0;
   document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">Loyers dus ${MONTHS_SHORT[m-1]}</div>
-      <div class="stat-value gold">${fmtMoney(totalDu)}</div>
+    <div class="stat-card blue">
+      <div class="stat-icon">💰</div>
+      <div class="stat-label">Loyers dus</div>
+      <div class="stat-value blue">${fmtMoney(totalDu)}</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Perçus ${MONTHS_SHORT[m-1]}</div>
-      <div class="stat-value ${totalPercu >= totalDu ? 'green' : 'amber'}">${fmtMoney(totalPercu)}</div>
+    <div class="stat-card green">
+      <div class="stat-icon">✅</div>
+      <div class="stat-label">Perçus</div>
+      <div class="stat-value ${totalPercu>=totalDu?'green':'amber'}">${fmtMoney(totalPercu)}</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card ${nbImpaye>0?'red':'green'}">
+      <div class="stat-icon">${nbImpaye>0?'⚠️':'🎉'}</div>
       <div class="stat-label">Impayés</div>
-      <div class="stat-value ${nbImpaye > 0 ? 'red' : 'green'}">${nbImpaye} / ${nbApparts}</div>
+      <div class="stat-value ${nbImpaye>0?'red':'green'}">${nbImpaye} / ${nbAppts}</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Taux recouvrement</div>
-      <div class="stat-value ${totalDu > 0 && totalPercu/totalDu >= 0.9 ? 'green' : 'amber'}">${totalDu > 0 ? Math.round(totalPercu/totalDu*100) : 0}%</div>
+    <div class="stat-card amber">
+      <div class="stat-icon">📊</div>
+      <div class="stat-label">Recouvrement</div>
+      <div class="stat-value ${taux>=90?'green':taux>=60?'amber':'red'}">${taux}%</div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:${taux}%;background:${taux>=90?'var(--success)':taux>=60?'var(--accent)':'var(--danger)'}"></div></div>
     </div>
   `;
 
-  // Augmentation alerts
-  const alerts = state.apartments.filter(a => !a.vacant && shouldIncreaseNow(a));
-  const alertsEl = document.getElementById('increase-alerts');
-  if (alerts.length === 0) {
-    alertsEl.innerHTML = '<div style="color:var(--text3);font-size:13px;margin-bottom:12px;">Aucune augmentation prévue ce mois.</div>';
-  } else {
-    alertsEl.innerHTML = alerts.map(apt => {
-      const newLoyer = Math.round(apt.loyer * 1.1);
-      return `<div class="increase-alert">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <div class="increase-alert-text">
-          <div class="increase-alert-title">Apt. ${apt.id} — ${apt.name}</div>
-          <div>${apt.loyer} → ${newLoyer} MAD (+10%)</div>
-          <button class="btn btn-primary btn-sm" style="margin-top:8px;flex:none;" onclick="applyIncrease(${apt.id})">Appliquer l'augmentation</button>
-        </div>
-      </div>`;
-    }).join('');
+  // Alerts
+  const alerts = state.apartments.filter(a=>!a.vacant&&shouldIncreaseNow(a));
+  const vacants = state.apartments.filter(a=>a.vacant);
+  let alertsHTML = '';
+  alerts.forEach(apt => {
+    const newLoyer = Math.round(apt.loyer*1.1);
+    alertsHTML += `<div class="alert-card alert-amber">
+      <div class="alert-icon">📈</div>
+      <div style="flex:1">
+        <div class="alert-title">Augmentation due — Apt. ${apt.id}</div>
+        <div class="alert-body">${apt.name} · ${apt.loyer} → ${newLoyer} MAD (+10%)</div>
+        <button class="btn btn-amber btn-sm" style="margin-top:8px;flex:none" onclick="applyIncrease(${apt.id})">Appliquer maintenant</button>
+      </div>
+    </div>`;
+  });
+  if (vacants.length > 0) {
+    alertsHTML += `<div class="alert-card alert-blue">
+      <div class="alert-icon">🔑</div>
+      <div style="flex:1">
+        <div class="alert-title">${vacants.length} appartement${vacants.length>1?'s':''} vacant${vacants.length>1?'s':''}</div>
+        <div class="alert-body">${vacants.map(a=>a.name).join(', ')}</div>
+      </div>
+    </div>`;
   }
+  if (!alertsHTML) alertsHTML = `<div class="alert-card alert-blue"><div class="alert-icon">✨</div><div><div class="alert-title">Tout est en ordre !</div><div class="alert-body">Aucune alerte ce mois.</div></div></div>`;
+  document.getElementById('alerts-zone').innerHTML = alertsHTML;
 
-  // Current month list
-  const listEl = document.getElementById('current-month-list');
-  listEl.innerHTML = state.apartments.map(apt => {
-    if (apt.vacant) return `<div class="apt-card"><div class="apt-header"><div class="apt-num">${apt.id}</div><div class="apt-info"><div class="apt-name">${apt.name}</div><div class="apt-tenant">Vacant</div></div><div class="apt-status"><span class="badge badge-vacant">Vacant</span></div></div></div>`;
-    const loyer = computeLoyer(apt, y, m);
+  // Current month
+  document.getElementById('current-month-list').innerHTML = state.apartments.map(apt => {
+    if (apt.vacant) return `<div class="apt-card"><div class="apt-header" style="cursor:default">
+      <div class="apt-num color-${(apt.id-1)%13}">🔑</div>
+      <div class="apt-info"><div class="apt-name">${apt.name}</div><div class="apt-tenant">Vacant</div></div>
+      <div class="apt-right"><span class="badge badge-vacant">Vacant</span>
+      <button class="btn btn-success btn-sm" style="flex:none;margin-top:4px" onclick="openNewTenantModal(${apt.id})">+ Locataire</button></div>
+    </div></div>`;
+    const loyer = computeLoyer(apt,y,m);
     if (!loyer) return '';
-    const pay = getPayment(apt.id, y, m);
+    const pay = getPayment(apt.id,y,m);
     const diff = loyer - pay.paid;
-    let badge = '';
-    if (diff <= 0) badge = '<span class="badge badge-ok">Payé</span>';
-    else if (pay.paid > 0) badge = '<span class="badge badge-warn">Partiel</span>';
-    else badge = '<span class="badge badge-danger">Impayé</span>';
-    return `<div class="apt-card" onclick="openPaymentModal(${apt.id}, ${y}, ${m})">
+    let badge = diff<=0 ? '<span class="badge badge-ok">✓ Payé</span>' : pay.paid>0 ? '<span class="badge badge-warn">Partiel</span>' : '<span class="badge badge-danger">Impayé</span>';
+    return `<div class="apt-card" onclick="openPaymentModal(${apt.id},${y},${m})">
       <div class="apt-header">
-        <div class="apt-num">${apt.id}</div>
+        <div class="apt-num color-${(apt.id-1)%13}">${apt.id}</div>
         <div class="apt-info">
           <div class="apt-name">${apt.name}</div>
-          <div class="apt-tenant">${apt.tenant || '—'}</div>
+          <div class="apt-tenant">👤 ${apt.tenant||'—'}</div>
         </div>
-        <div class="apt-status">
-          ${badge}
-          <div class="apt-loyer">${fmtMoney(loyer)}</div>
-        </div>
+        <div class="apt-right">${badge}<div class="apt-loyer">${fmtMoney(loyer)}</div></div>
       </div>
     </div>`;
   }).join('');
 }
 
 // -- APPARTEMENTS --
-let openAptId = null;
 function renderApts() {
   const years = [];
-  for (let y = 2022; y <= now.getFullYear() + 1; y++) years.push(y);
-
-  const tabsEl = document.getElementById('year-tabs-apts');
-  tabsEl.innerHTML = years.map(y => `<div class="year-pill ${y === currentYear ? 'active' : ''}" onclick="setAptYear(${y})">${y}</div>`).join('');
-
-  const listEl = document.getElementById('apts-list');
-  listEl.innerHTML = state.apartments.map(apt => buildAptCard(apt)).join('');
+  for (let y=2022; y<=now.getFullYear()+1; y++) years.push(y);
+  document.getElementById('year-tabs-apts').innerHTML = years.map(y=>`<div class="year-pill ${y===currentYear?'active':''}" onclick="setAptYear(${y})">${y}</div>`).join('');
+  const q = (document.getElementById('search-apts')||{}).value?.toLowerCase()||'';
+  const filtered = state.apartments.filter(a => !q || a.name.toLowerCase().includes(q) || (a.tenant||'').toLowerCase().includes(q));
+  document.getElementById('apts-list').innerHTML = filtered.map(apt=>buildAptCard(apt)).join('');
 }
 
-function setAptYear(y) {
-  currentYear = y;
-  renderApts();
-}
+function setAptYear(y) { currentYear=y; renderApts(); }
 
 function buildAptCard(apt) {
-  const isOpen = openAptId === apt.id;
-  const totalReliq = getReliquatTotal(apt);
-  let statusBadge = '';
-  if (apt.vacant) statusBadge = '<span class="badge badge-vacant">Vacant</span>';
-  else if (totalReliq > 0) statusBadge = `<span class="badge badge-danger">Reliquat ${fmtMoney(totalReliq)}</span>`;
-  else statusBadge = '<span class="badge badge-ok">À jour</span>';
+  const isOpen = openAptId===apt.id;
+  const unpaid = getUnpaidTotal(apt);
+  const loyer = apt.vacant ? 0 : computeLoyer(apt,currentYear,6);
+  let badge = apt.vacant ? '<span class="badge badge-vacant">Vacant</span>' :
+    unpaid>0 ? `<span class="badge badge-danger">⚠ ${fmtMoney(unpaid)}</span>` :
+    '<span class="badge badge-ok">✓ À jour</span>';
 
-  const loyer = apt.vacant ? 0 : computeLoyer(apt, currentYear, 6);
-  const loyerStr = apt.vacant || !loyer ? '—' : fmtMoney(loyer);
-
-  let detailHtml = '';
+  let detail = '';
   if (isOpen) {
-    // Months grid for currentYear
-    const monthsHtml = buildMonthsGrid(apt, currentYear);
-    const nextInc = nextIncreaseDate(apt);
-    const entryDateStr = apt.entryDate ? fmtDate(apt.entryDate) : '—';
-
-    detailHtml = `<div class="apt-detail open">
-      <div class="detail-row"><span class="detail-label">Locataire</span><span class="detail-value">${apt.tenant || 'Vacant'}</span></div>
-      <div class="detail-row"><span class="detail-label">Date d'entrée</span><span class="detail-value">${entryDateStr}</span></div>
-      <div class="detail-row"><span class="detail-label">Loyer actuel</span><span class="detail-value">${loyerStr}</span></div>
-      <div class="detail-row"><span class="detail-label">Prochaine augmentation</span><span class="detail-value">${nextInc ? fmtDate(nextInc.toISOString()) : '—'}</span></div>
-      ${apt.obs ? `<div class="detail-row"><span class="detail-label">Observation</span><span class="detail-value" style="font-size:12px;text-align:right;max-width:65%">${apt.obs}</span></div>` : ''}
-      ${totalReliq > 0 ? `<div class="detail-row"><span class="detail-label">Reliquat total</span><span class="detail-value" style="color:var(--danger)">${fmtMoney(totalReliq)}</span></div>` : ''}
-      <div style="font-size:12px;color:var(--text2);margin-top:12px;margin-bottom:4px;">Paiements ${currentYear}</div>
-      ${monthsHtml}
-      <div class="btn-row">
-        ${apt.vacant 
+    const months = buildMonthsGrid(apt, currentYear);
+    const nd = nextIncreaseDate(apt);
+    detail = `<div class="apt-detail open"><div class="detail-inner">
+      <div class="detail-row"><span class="detail-label">👤 Locataire</span><span class="detail-value">${apt.tenant||'Vacant'}</span></div>
+      <div class="detail-row"><span class="detail-label">📅 Date d'entrée</span><span class="detail-value">${fmtDate(apt.entryDate)}</span></div>
+      <div class="detail-row"><span class="detail-label">💶 Loyer base</span><span class="detail-value">${fmtMoney(apt.loyer)}</span></div>
+      ${nd?`<div class="detail-row"><span class="detail-label">📈 Proch. augmentation</span><span class="detail-value">${fmtDate(nd.toISOString())}</span></div>`:''}
+      ${apt.obs?`<div class="detail-row"><span class="detail-label">📝 Note</span><span class="detail-value" style="font-size:11px">${apt.obs}</span></div>`:''}
+      ${unpaid>0?`<div class="detail-row"><span class="detail-label">⚠️ Reliquat total</span><span class="detail-value" style="color:var(--danger)">${fmtMoney(unpaid)}</span></div>`:''}
+      <div class="months-title" style="margin-top:12px">Paiements ${currentYear}</div>
+      ${months}
+      <div class="btn-row" style="margin-top:12px">
+        ${apt.vacant
           ? `<button class="btn btn-success" onclick="openNewTenantModal(${apt.id});event.stopPropagation()">+ Nouveau locataire</button>`
-          : `<button class="btn btn-secondary" onclick="openEditModal(${apt.id});event.stopPropagation()">✏️ Modifier</button>
-             <button class="btn btn-danger" onclick="markVacant(${apt.id});event.stopPropagation()">Locataire parti</button>`
+          : `<button class="btn btn-primary" onclick="openEditModal(${apt.id});event.stopPropagation()">✏️ Modifier</button>
+             <button class="btn btn-purple" onclick="openTenantFile(${apt.id});event.stopPropagation()">📁 Fiche</button>
+             <button class="btn btn-danger" onclick="markVacant(${apt.id});event.stopPropagation()">🚪 Parti</button>`
         }
       </div>
-      ${!apt.vacant && totalReliq > 0 ? `<div class="btn-row"><button class="btn btn-danger btn-sm" style="flex:none;width:100%" onclick="cancelDebt(${apt.id});event.stopPropagation()">🗑 Annuler reliquat / effacer dette</button></div>` : ''}
-    </div>`;
+      ${!apt.vacant&&unpaid>0?`<div class="btn-row" style="margin-top:8px"><button class="btn btn-danger btn-full" onclick="cancelDebt(${apt.id});event.stopPropagation()">🗑 Annuler toute la dette</button></div>`:''}
+    </div></div>`;
   }
 
   return `<div class="apt-card" id="apt-card-${apt.id}">
     <div class="apt-header" onclick="toggleApt(${apt.id})">
-      <div class="apt-num">${apt.id}</div>
+      <div class="apt-num color-${(apt.id-1)%13}">${apt.id}</div>
       <div class="apt-info">
         <div class="apt-name">${apt.name}</div>
-        <div class="apt-tenant">${apt.vacant ? 'Vacant' : (apt.tenant || '—')}</div>
+        <div class="apt-tenant">${apt.vacant?'🔑 Vacant':'👤 '+(apt.tenant||'—')}</div>
       </div>
-      <div class="apt-status">
-        ${statusBadge}
-        <div class="apt-loyer">${loyerStr}</div>
+      <div class="apt-right">
+        ${badge}
+        ${loyer?`<div class="apt-loyer">${fmtMoney(loyer)}</div>`:''}
+        <div class="apt-chevron ${isOpen?'open'}">▾</div>
       </div>
     </div>
-    ${detailHtml}
+    ${detail}
   </div>`;
 }
 
 function buildMonthsGrid(apt, year) {
-  const nowYear = now.getFullYear(), nowMonth = now.getMonth() + 1;
+  const nowY = now.getFullYear(), nowM = now.getMonth()+1;
   let html = '<div class="months-grid">';
-  for (let m = 1; m <= 12; m++) {
-    const loyer = computeLoyer(apt, year, m);
-    const isFuture = year > nowYear || (year === nowYear && m > nowMonth);
+  for (let m=1; m<=12; m++) {
+    const loyer = computeLoyer(apt,year,m);
+    const isFuture = year>nowY || (year===nowY && m>nowM);
     const entryDate = apt.entryDate ? new Date(apt.entryDate) : null;
-    const monthDate = new Date(year, m-1, 1);
-    const beforeEntry = entryDate && monthDate < new Date(entryDate.getFullYear(), entryDate.getMonth(), 1);
+    const beforeEntry = entryDate && new Date(year,m-1,1) < new Date(entryDate.getFullYear(),entryDate.getMonth(),1);
     if (!loyer || beforeEntry) {
-      html += `<div class="month-cell future"><div class="mo">${MONTHS_SHORT[m-1]}</div><div class="amt">—</div></div>`;
+      html += `<div class="month-cell na"><div class="mo">${MONTHS_SHORT[m-1]}</div><div class="amt">—</div></div>`;
       continue;
     }
-    const pay = getPayment(apt.id, year, m);
-    const diff = loyer - pay.paid + (pay.reliquat || 0);
-    let cls = isFuture ? 'future' : (diff <= 0 ? 'paid' : (pay.paid > 0 ? 'partial' : 'unpaid'));
-    const amtDisplay = pay.paid > 0 ? Math.round(pay.paid/1000*10)/10 + 'k' : '0';
-    html += `<div class="month-cell ${cls}" ${!isFuture ? `onclick="openPaymentModal(${apt.id},${year},${m});event.stopPropagation()"` : ''}>
-      <div class="mo">${MONTHS_SHORT[m-1]}</div>
-      <div class="amt">${amtDisplay}</div>
+    const pay = getPayment(apt.id,year,m);
+    const diff = loyer - pay.paid;
+    let cls = isFuture ? 'future' : (diff<=0?'paid':pay.paid>0?'partial':'unpaid');
+    const amtD = pay.paid>0 ? (pay.paid>=1000?Math.round(pay.paid/100)/10+'k':pay.paid) : '0';
+    html += `<div class="month-cell ${cls}" ${!isFuture?`onclick="openPaymentModal(${apt.id},${year},${m});event.stopPropagation()"`:''}>
+      <div class="mo">${MONTHS_SHORT[m-1]}</div><div class="amt">${amtD}</div>
     </div>`;
   }
-  html += '</div>';
-  return html;
+  return html + '</div>';
 }
 
 function toggleApt(id) {
-  openAptId = openAptId === id ? null : id;
+  openAptId = openAptId===id ? null : id;
   renderApts();
-  if (openAptId) {
-    setTimeout(() => {
-      const el = document.getElementById('apt-card-' + id);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 50);
+  if (openAptId) setTimeout(()=>{ document.getElementById('apt-card-'+id)?.scrollIntoView({behavior:'smooth',block:'nearest'}); },60);
+}
+
+// -- TENANTS --
+function renderTenants() {
+  const q = (document.getElementById('search-tenants')||{}).value?.toLowerCase()||'';
+  const active = state.apartments.filter(a => !a.vacant && a.tenant && (!q || a.tenant.toLowerCase().includes(q) || a.name.toLowerCase().includes(q)));
+  if (!active.length) {
+    document.getElementById('tenants-list').innerHTML = `<div class="empty-state"><div class="icon">👤</div><p>Aucun locataire trouvé</p></div>`;
+    return;
   }
+  document.getElementById('tenants-list').innerHTML = active.map(apt => {
+    const tr = state.tenants[apt.id]||{};
+    const docs = state.documents[apt.id]||[];
+    const nd = nextIncreaseDate(apt);
+    const unpaid = getUnpaidTotal(apt);
+    const isOpen = openTenantId===apt.id;
+    let detail = '';
+    if (isOpen) {
+      detail = `<div class="tenant-detail open">
+        <div class="detail-row"><span class="detail-label">📞 Téléphone</span><span class="detail-value">${tr.tel||'—'}</span></div>
+        <div class="detail-row"><span class="detail-label">✉️ Email</span><span class="detail-value" style="font-size:12px">${tr.email||'—'}</span></div>
+        <div class="detail-row"><span class="detail-label">🪪 CIN / Passeport</span><span class="detail-value">${tr.cin||'—'}</span></div>
+        <div class="detail-row"><span class="detail-label">💼 Profession</span><span class="detail-value">${tr.profession||'—'}</span></div>
+        <div class="detail-row"><span class="detail-label">📅 Date d'entrée</span><span class="detail-value">${fmtDate(apt.entryDate)}</span></div>
+        <div class="detail-row"><span class="detail-label">💶 Loyer actuel</span><span class="detail-value" style="color:var(--primary)">${fmtMoney(computeLoyer(apt,now.getFullYear(),now.getMonth()+1))}</span></div>
+        ${unpaid>0?`<div class="detail-row"><span class="detail-label">⚠️ Reliquat</span><span class="detail-value" style="color:var(--danger)">${fmtMoney(unpaid)}</span></div>`:''}
+        ${nd?`<div class="detail-row"><span class="detail-label">📈 Proch. augmentation</span><span class="detail-value">${fmtDate(nd.toISOString())}</span></div>`:''}
+        ${tr.notes?`<div class="detail-row"><span class="detail-label">📝 Notes</span><span class="detail-value" style="font-size:11px;max-width:65%">${tr.notes}</span></div>`:''}
+        <div class="sep"></div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">📎 Documents (${docs.length})</div>
+        <div class="doc-list">
+          ${docs.map((doc,i)=>`<div class="doc-item doc-type-${doc.category||'piece'}" onclick="viewDoc(${apt.id},${i})">
+            <div class="doc-icon">${getDocIcon(doc.type)}</div>
+            <div class="doc-info"><div class="doc-name">${doc.name}</div><div class="doc-meta">${doc.category==='bail'?'📋 Contrat de bail':doc.category==='photo'?'🖼 Photo':'📎 Pièce jointe'} · ${fmtDate(doc.date)}</div></div>
+            <button class="doc-del" onclick="deleteDoc(${apt.id},${i});event.stopPropagation()">✕</button>
+          </div>`).join('')}
+        </div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn btn-primary" onclick="openTenantFile(${apt.id});event.stopPropagation()">✏️ Modifier fiche</button>
+          <button class="btn btn-secondary" onclick="addDocument(${apt.id},'bail');event.stopPropagation()">📋 Bail</button>
+          <button class="btn btn-purple" onclick="addDocument(${apt.id},'piece');event.stopPropagation()">📎 Pièce</button>
+        </div>
+      </div>`;
+    }
+    return `<div class="tenant-card" id="tenant-card-${apt.id}">
+      <div class="tenant-header" onclick="toggleTenant(${apt.id})">
+        <div class="tenant-avatar color-${(apt.id-1)%13}">${getInitials(apt.tenant)}</div>
+        <div class="tenant-info">
+          <div class="tenant-name">${apt.tenant}</div>
+          <div class="tenant-apt">🏠 ${apt.name} · Apt. ${apt.id}</div>
+          ${tr.tel?`<div style="font-size:11px;color:var(--text2);margin-top:1px">📞 ${tr.tel}</div>`:''}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          ${unpaid>0?`<span class="badge badge-danger">⚠ ${fmtMoney(unpaid)}</span>`:'<span class="badge badge-ok">✓ OK</span>'}
+          ${docs.length>0?`<span class="badge badge-purple">📎 ${docs.length}</span>`:''}
+          <div class="apt-chevron ${isOpen?'open'}">▾</div>
+        </div>
+      </div>
+      ${detail}
+    </div>`;
+  }).join('');
+}
+
+function toggleTenant(id) {
+  openTenantId = openTenantId===id ? null : id;
+  renderTenants();
+  if (openTenantId) setTimeout(()=>{ document.getElementById('tenant-card-'+id)?.scrollIntoView({behavior:'smooth',block:'nearest'}); },60);
 }
 
 // -- STATS --
 function renderStats() {
-  const years = [];
-  for (let y = 2022; y <= now.getFullYear(); y++) years.push(y);
-  const tabsEl = document.getElementById('year-tabs-stats');
-  tabsEl.innerHTML = years.map(y => `<div class="year-pill ${y === statsYear ? 'active' : ''}" onclick="setStatsYear(${y})">${y}</div>`).join('');
-
+  const years=[];
+  for (let y=2022; y<=now.getFullYear(); y++) years.push(y);
+  document.getElementById('year-tabs-stats').innerHTML = years.map(y=>`<div class="year-pill ${y===statsYear?'active':''}" onclick="setStatsYear(${y})">${y}</div>`).join('');
   const y = statsYear;
-  let totalDu = 0, totalPercu = 0;
-  const recapRows = state.apartments.map(apt => {
+  let totalDu=0, totalPercu=0;
+  const rows = state.apartments.map(apt => {
     if (apt.vacant) return null;
-    let aptDu = 0, aptPercu = 0;
-    for (let m = 1; m <= 12; m++) {
-      const loyer = computeLoyer(apt, y, m);
-      if (!loyer) continue;
-      const pay = getPayment(apt.id, y, m);
-      aptDu += loyer;
-      aptPercu += pay.paid;
-    }
-    totalDu += aptDu;
-    totalPercu += aptPercu;
-    const diff = aptDu - aptPercu;
-    return { apt, aptDu, aptPercu, diff };
-  }).filter(Boolean);
+    let du=0, percu=0;
+    for (let m=1; m<=12; m++) { const l=computeLoyer(apt,y,m); if(!l)continue; du+=l; percu+=getPayment(apt.id,y,m).paid; }
+    totalDu+=du; totalPercu+=percu;
+    return { apt, du, percu, diff:du-percu };
+  }).filter(Boolean).sort((a,b)=>b.diff-a.diff);
 
+  const taux = totalDu>0 ? Math.round(totalPercu/totalDu*100) : 0;
   document.getElementById('stats-year-grid').innerHTML = `
-    <div class="stat-card"><div class="stat-label">Total dû ${y}</div><div class="stat-value gold">${fmtMoney(totalDu)}</div></div>
-    <div class="stat-card"><div class="stat-label">Total perçu ${y}</div><div class="stat-value ${totalPercu >= totalDu*0.9 ? 'green' : 'amber'}">${fmtMoney(totalPercu)}</div></div>
-    <div class="stat-card"><div class="stat-label">Manquant</div><div class="stat-value ${totalDu-totalPercu > 0 ? 'red' : 'green'}">${fmtMoney(totalDu - totalPercu)}</div></div>
-    <div class="stat-card"><div class="stat-label">Taux</div><div class="stat-value ${totalDu > 0 && totalPercu/totalDu >= 0.9 ? 'green' : 'amber'}">${totalDu > 0 ? Math.round(totalPercu/totalDu*100) : 0}%</div></div>
+    <div class="stat-card blue"><div class="stat-icon">📋</div><div class="stat-label">Total dû ${y}</div><div class="stat-value blue">${fmtMoney(totalDu)}</div></div>
+    <div class="stat-card green"><div class="stat-icon">💵</div><div class="stat-label">Total perçu ${y}</div><div class="stat-value ${totalPercu>=totalDu*0.9?'green':'amber'}">${fmtMoney(totalPercu)}</div></div>
+    <div class="stat-card ${totalDu-totalPercu>0?'red':'green'}"><div class="stat-icon">📉</div><div class="stat-label">Manquant</div><div class="stat-value ${totalDu-totalPercu>0?'red':'green'}">${fmtMoney(totalDu-totalPercu)}</div></div>
+    <div class="stat-card amber"><div class="stat-icon">📊</div><div class="stat-label">Taux</div><div class="stat-value ${taux>=90?'green':taux>=60?'amber':'red'}">${taux}%</div><div class="progress-wrap"><div class="progress-bar" style="width:${taux}%;background:${taux>=90?'var(--success)':taux>=60?'var(--accent)':'var(--danger)'}"></div></div></div>
   `;
-
-  document.getElementById('year-recap-list').innerHTML = recapRows.map(({apt, aptDu, aptPercu, diff}) => `
-    <div class="hist-entry">
-      <div class="hist-top">
-        <div><span style="color:var(--accent);font-size:11px;font-weight:700;">Apt. ${apt.id}</span> <span class="hist-apt">${apt.name}</span></div>
-        <div class="${diff > 0 ? 'hist-amount' : ''}" style="color:${diff > 0 ? 'var(--danger)' : 'var(--success)'}">${fmtMoney(aptPercu)}</div>
+  document.getElementById('year-recap-list').innerHTML = rows.map(({apt,du,percu,diff})=>`
+    <div class="recap-row">
+      <div class="recap-top">
+        <div>
+          <span class="tag">Apt. ${apt.id}</span>
+          <span class="recap-name" style="margin-left:6px">${apt.name}</span>
+        </div>
+        <div class="recap-amount" style="color:${diff>0?'var(--danger)':'var(--success)'}">${fmtMoney(percu)}</div>
       </div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;">
-        <div class="hist-action">${apt.tenant || 'Sans locataire'}</div>
-        <div class="hist-action">/ ${fmtMoney(aptDu)} dû${diff > 0 ? ` · manque ${fmtMoney(diff)}` : ''}</div>
-      </div>
-    </div>
-  `).join('');
+      <div class="recap-sub">${apt.tenant||'—'} · dû ${fmtMoney(du)}${diff>0?' · manque '+fmtMoney(diff):' ✓'}</div>
+      <div class="progress-wrap" style="margin-top:6px"><div class="progress-bar" style="width:${du>0?Math.min(100,Math.round(percu/du*100)):0}%;background:${diff>0?'var(--warn)':'var(--success)'}"></div></div>
+    </div>`).join('');
 }
 
-function setStatsYear(y) {
-  statsYear = y;
-  renderStats();
-}
+function setStatsYear(y) { statsYear=y; renderStats(); }
 
-// ============================================================
+// =====================================================
 // MODALS
-// ============================================================
+// =====================================================
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-// Click outside to close
 document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', function(e) {
-    if (e.target === this) closeModal(this.id);
-  });
+  el.addEventListener('click', function(e) { if(e.target===this) closeModal(this.id); });
 });
 
-// -- PAIEMENT MODAL --
+// -- PAIEMENT --
 let payCtx = {};
-function openPaymentModal(aptId, year, month) {
-  const apt = state.apartments.find(a => a.id === aptId);
+function openPaymentModal(aptId,year,month) {
+  const apt = state.apartments.find(a=>a.id===aptId);
   if (!apt) return;
-  const loyer = computeLoyer(apt, year, month);
-  const pay = getPayment(aptId, year, month);
-  payCtx = { aptId, year, month, loyer, pay };
-
-  document.getElementById('modal-payment-title').textContent = `Apt. ${aptId} — ${MONTHS_LONG[month-1]} ${year}`;
+  const loyer = computeLoyer(apt,year,month);
+  const pay = getPayment(aptId,year,month);
+  payCtx = { aptId,year,month,loyer };
+  document.getElementById('modal-payment-title').textContent = `${MONTHS_LONG[month-1]} ${year}`;
   const diff = loyer - pay.paid;
-
   document.getElementById('modal-payment-body').innerHTML = `
-    <div class="detail-row"><span class="detail-label">Appartement</span><span class="detail-value">${apt.name}</span></div>
-    <div class="detail-row"><span class="detail-label">Locataire</span><span class="detail-value">${apt.tenant || '—'}</span></div>
-    <div class="detail-row"><span class="detail-label">Loyer dû</span><span class="detail-value" style="color:var(--accent);font-weight:700">${fmtMoney(loyer)}</span></div>
-    <div class="detail-row"><span class="detail-label">Déjà payé</span><span class="detail-value" style="color:var(--success)">${fmtMoney(pay.paid)}</span></div>
-    ${diff > 0 ? `<div class="detail-row"><span class="detail-label">Reste à payer</span><span class="detail-value" style="color:var(--danger)">${fmtMoney(diff)}</span></div>` : ''}
-    ${pay.reliquat ? `<div class="detail-row"><span class="detail-label">Reliquat reporté</span><span class="detail-value" style="color:var(--warn)">${fmtMoney(pay.reliquat)}</span></div>` : ''}
-    <div class="sep"></div>
-    <div class="form-group">
-      <label>Montant payé ce mois (MAD)</label>
-      <input type="number" id="pay-amount" value="${pay.paid || ''}" placeholder="${loyer}" inputmode="numeric">
+    <div style="background:var(--primary-light);border-radius:12px;padding:12px 14px;margin-bottom:14px;border:1px solid var(--primary-mid)">
+      <div style="font-size:12px;color:var(--text2);font-weight:700">🏠 ${apt.name}</div>
+      <div style="font-size:14px;font-weight:800;margin-top:2px">👤 ${apt.tenant||'—'}</div>
     </div>
-    <div class="form-group">
-      <label>Reliquat / ajustement (MAD)</label>
-      <input type="number" id="pay-reliquat" value="${pay.reliquat || 0}" placeholder="0" inputmode="numeric">
+    <div class="stats-grid" style="margin-bottom:14px">
+      <div class="stat-card blue"><div class="stat-label">Loyer dû</div><div class="stat-value blue" style="font-size:16px">${fmtMoney(loyer)}</div></div>
+      <div class="stat-card ${diff<=0?'green':'red'}"><div class="stat-label">${diff<=0?'Soldé':'Reste à payer'}</div><div class="stat-value ${diff<=0?'green':'red'}" style="font-size:16px">${diff<=0?'✓':fmtMoney(diff)}</div></div>
     </div>
-    <div class="form-group">
-      <label>Note</label>
-      <input type="text" id="pay-note" value="${pay.note || ''}" placeholder="ex: chèque reçu, virement...">
-    </div>
+    ${pay.paid>0?`<div style="font-size:13px;color:var(--text2);margin-bottom:12px;font-weight:600">💵 Déjà enregistré: <strong style="color:var(--success)">${fmtMoney(pay.paid)}</strong></div>`:''}
+    <div class="form-group"><label>Montant payé ce mois (MAD)</label><input type="number" id="pay-amount" value="${pay.paid||''}" placeholder="${loyer}" inputmode="numeric"></div>
+    <div class="form-group"><label>Reliquat / ajustement (MAD)</label><input type="number" id="pay-reliquat" value="${pay.reliquat||0}" placeholder="0" inputmode="numeric"></div>
+    <div class="form-group"><label>Note</label><input type="text" id="pay-note" value="${pay.note||''}" placeholder="Chèque, virement, espèces..."></div>
     <div class="btn-row">
-      <button class="btn btn-success" onclick="savePayment()">✓ Enregistrer</button>
-      <button class="btn btn-primary" onclick="markFullyPaid()">Payé en totalité</button>
+      <button class="btn btn-success" onclick="markFullyPaid()">✅ Soldé en totalité</button>
+      <button class="btn btn-primary" onclick="savePayment()">💾 Enregistrer</button>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-secondary btn-sm" onclick="resetPayment()">Réinitialiser</button>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn btn-danger btn-sm" onclick="resetPayment()">🗑 Réinitialiser</button>
     </div>
   `;
   openModal('modal-payment');
 }
 
 function savePayment() {
-  const { aptId, year, month } = payCtx;
-  const paid = parseFloat(document.getElementById('pay-amount').value) || 0;
-  const reliquat = parseFloat(document.getElementById('pay-reliquat').value) || 0;
+  const {aptId,year,month} = payCtx;
+  const paid = parseFloat(document.getElementById('pay-amount').value)||0;
+  const reliquat = parseFloat(document.getElementById('pay-reliquat').value)||0;
   const note = document.getElementById('pay-note').value;
-  const key = getPayKey(aptId, year, month);
-  state.payments[key] = { paid, reliquat, note };
-  addHistory(aptId, `Paiement ${MONTHS_SHORT[month-1]} ${year}: ${fmtMoney(paid)}`);
-  saveState();
-  closeModal('modal-payment');
-  toast('Paiement enregistré ✓');
-  render();
+  state.payments[getPayKey(aptId,year,month)] = { paid,reliquat,note };
+  addHistory(aptId,`Paiement ${MONTHS_SHORT[month-1]} ${year}: ${fmtMoney(paid)}`);
+  saveState(); closeModal('modal-payment'); toast('💾 Paiement enregistré'); render();
 }
 
 function markFullyPaid() {
-  const { aptId, year, month, loyer } = payCtx;
+  const {aptId,year,month,loyer} = payCtx;
   const note = document.getElementById('pay-note').value;
-  const key = getPayKey(aptId, year, month);
-  state.payments[key] = { paid: loyer, reliquat: 0, note };
-  addHistory(aptId, `Paiement complet ${MONTHS_SHORT[month-1]} ${year}: ${fmtMoney(loyer)}`);
-  saveState();
-  closeModal('modal-payment');
-  toast('Mois soldé ✓');
-  render();
+  state.payments[getPayKey(aptId,year,month)] = { paid:loyer, reliquat:0, note };
+  addHistory(aptId,`Paiement complet ${MONTHS_SHORT[month-1]} ${year}: ${fmtMoney(loyer)}`);
+  saveState(); closeModal('modal-payment'); toast('✅ Mois soldé !'); render();
 }
 
 function resetPayment() {
-  const { aptId, year, month } = payCtx;
-  const key = getPayKey(aptId, year, month);
-  delete state.payments[key];
-  addHistory(aptId, `Paiement ${MONTHS_SHORT[month-1]} ${year} réinitialisé`);
-  saveState();
-  closeModal('modal-payment');
-  toast('Paiement réinitialisé');
-  render();
+  const {aptId,year,month} = payCtx;
+  delete state.payments[getPayKey(aptId,year,month)];
+  addHistory(aptId,`Paiement ${MONTHS_SHORT[month-1]} ${year} réinitialisé`);
+  saveState(); closeModal('modal-payment'); toast('🔄 Réinitialisé'); render();
 }
 
-// -- EDIT MODAL --
+// -- EDIT APT --
 function openEditModal(aptId) {
-  const apt = state.apartments.find(a => a.id === aptId);
-  if (!apt) return;
-  document.getElementById('modal-apt-edit-title').textContent = `Modifier — Apt. ${aptId}`;
+  const apt = state.apartments.find(a=>a.id===aptId);
+  document.getElementById('modal-apt-edit-title').textContent = `Apt. ${aptId} — ${apt.name}`;
   document.getElementById('modal-apt-edit-body').innerHTML = `
-    <div class="form-group"><label>Nom du locataire</label><input type="text" id="edit-tenant" value="${apt.tenant || ''}"></div>
-    <div class="form-group"><label>Loyer de base (MAD)</label><input type="number" id="edit-loyer" value="${apt.loyer || 0}" inputmode="numeric"></div>
-    <div class="form-group"><label>Date d'entrée</label><input type="date" id="edit-entry" value="${apt.entryDate || ''}"></div>
-    <div class="form-group"><label>Observations</label><textarea id="edit-obs">${apt.obs || ''}</textarea></div>
+    <div class="form-group"><label>Nom du locataire</label><input type="text" id="edit-tenant" value="${apt.tenant||''}"></div>
+    <div class="form-group"><label>Loyer de base (MAD)</label><input type="number" id="edit-loyer" value="${apt.loyer||0}" inputmode="numeric"></div>
+    <div class="form-group"><label>Date d'entrée</label><input type="date" id="edit-entry" value="${apt.entryDate||''}"></div>
+    <div class="form-group"><label>Observations</label><textarea id="edit-obs">${apt.obs||''}</textarea></div>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="saveEditApt(${aptId})">Enregistrer</button>
+      <button class="btn btn-primary" onclick="saveEditApt(${aptId})">💾 Enregistrer</button>
       <button class="btn btn-secondary" onclick="closeModal('modal-apt-edit')">Annuler</button>
     </div>
   `;
@@ -900,50 +1119,44 @@ function openEditModal(aptId) {
 }
 
 function saveEditApt(aptId) {
-  const apt = state.apartments.find(a => a.id === aptId);
-  if (!apt) return;
-  const newLoyer = parseFloat(document.getElementById('edit-loyer').value);
+  const apt = state.apartments.find(a=>a.id===aptId);
   apt.tenant = document.getElementById('edit-tenant').value.trim();
-  apt.loyer = newLoyer || apt.loyer;
+  apt.loyer = parseFloat(document.getElementById('edit-loyer').value)||apt.loyer;
   apt.entryDate = document.getElementById('edit-entry').value;
   apt.obs = document.getElementById('edit-obs').value;
-  addHistory(aptId, `Modification: loyer ${fmtMoney(apt.loyer)}, locataire: ${apt.tenant}`);
-  saveState();
-  closeModal('modal-apt-edit');
-  toast('Appartement mis à jour ✓');
-  render();
+  if (apt.tenant && !state.tenants[aptId]) initTenantRecord(apt);
+  if (state.tenants[aptId]) { state.tenants[aptId].nom=apt.tenant; state.tenants[aptId].entryDate=apt.entryDate; }
+  addHistory(aptId,`Modification: loyer ${fmtMoney(apt.loyer)}, locataire: ${apt.tenant}`);
+  saveState(); closeModal('modal-apt-edit'); toast('✅ Appartement mis à jour'); render();
 }
 
-// -- VACANT --
+// -- VACANT / NEW TENANT --
 function markVacant(aptId) {
   if (!confirm('Confirmer le départ du locataire ?')) return;
-  const apt = state.apartments.find(a => a.id === aptId);
-  if (!apt) return;
-  addHistory(aptId, `Départ de ${apt.tenant} — appartement vacant`);
-  apt.vacant = true;
-  apt.tenant = '';
-  openAptId = null;
-  saveState();
-  toast('Locataire marqué parti');
-  render();
+  const apt = state.apartments.find(a=>a.id===aptId);
+  addHistory(aptId,`Départ de ${apt.tenant}`);
+  apt.vacant=true; apt.tenant='';
+  openAptId=null; saveState(); toast('🚪 Locataire marqué parti'); render();
 }
 
-// -- NOUVEAU LOCATAIRE --
 function openNewTenantModal(aptId) {
-  const apt = state.apartments.find(a => a.id === aptId);
-  const today = new Date().toISOString().slice(0,10);
+  const apt = state.apartments.find(a=>a.id===aptId);
+  const today = now.toISOString().slice(0,10);
   document.getElementById('modal-new-tenant-body').innerHTML = `
-    <div style="background:rgba(212,168,83,0.08);border:1px solid rgba(212,168,83,0.25);border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;color:var(--text2);">
-      📅 Date d'entrée fixée automatiquement à aujourd'hui.<br>
-      💡 Augmentation de +10% appliquée automatiquement tous les 3 ans.
+    <div class="alert-card alert-blue" style="margin-bottom:14px">
+      <div class="alert-icon">💡</div>
+      <div><div class="alert-title">Information</div><div class="alert-body">Date d'entrée = aujourd'hui · Augmentation +10% automatique tous les 3 ans</div></div>
     </div>
-    <div class="form-group"><label>Appartement</label><input type="text" value="${apt ? apt.name : ''}" disabled style="opacity:0.5;"></div>
-    <div class="form-group"><label>Nom du locataire</label><input type="text" id="new-tenant-name" placeholder="Nom Prénom"></div>
-    <div class="form-group"><label>Loyer de base (MAD)</label><input type="number" id="new-tenant-loyer" placeholder="1500" inputmode="numeric"></div>
-    <div class="form-group"><label>Date d'entrée</label><input type="date" id="new-tenant-entry" value="${today}"></div>
-    <div class="form-group"><label>Observations</label><input type="text" id="new-tenant-obs" placeholder="Paiement début de mois..."></div>
+    <div class="form-group"><label>Appartement</label><input type="text" value="${apt?apt.name:''}" disabled style="opacity:0.6"></div>
+    <div class="form-group"><label>Nom complet du locataire</label><input type="text" id="new-name" placeholder="Nom Prénom"></div>
+    <div class="form-group"><label>Téléphone</label><input type="tel" id="new-tel" placeholder="06 XX XX XX XX" inputmode="tel"></div>
+    <div class="form-group"><label>Email</label><input type="email" id="new-email" placeholder="email@exemple.com"></div>
+    <div class="form-group"><label>CIN / Passeport</label><input type="text" id="new-cin" placeholder="AA123456"></div>
+    <div class="form-group"><label>Loyer de base (MAD)</label><input type="number" id="new-loyer" placeholder="1500" inputmode="numeric"></div>
+    <div class="form-group"><label>Date d'entrée</label><input type="date" id="new-entry" value="${today}"></div>
+    <div class="form-group"><label>Observations</label><input type="text" id="new-obs" placeholder="Paiement début de mois..."></div>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="saveNewTenant(${aptId})">Créer locataire</button>
+      <button class="btn btn-success" onclick="saveNewTenant(${aptId})">✅ Créer le locataire</button>
       <button class="btn btn-secondary" onclick="closeModal('modal-new-tenant')">Annuler</button>
     </div>
   `;
@@ -951,117 +1164,193 @@ function openNewTenantModal(aptId) {
 }
 
 function saveNewTenant(aptId) {
-  const apt = state.apartments.find(a => a.id === aptId);
-  if (!apt) return;
-  const name = document.getElementById('new-tenant-name').value.trim();
-  const loyer = parseFloat(document.getElementById('new-tenant-loyer').value);
-  const entry = document.getElementById('new-tenant-entry').value;
-  const obs = document.getElementById('new-tenant-obs').value;
-  if (!name || !loyer) { toast('⚠ Remplissez nom et loyer'); return; }
-  apt.tenant = name;
-  apt.loyer = loyer;
-  apt.entryDate = entry || todayStr();
-  apt.obs = obs;
-  apt.vacant = false;
-  addHistory(aptId, `Nouveau locataire: ${name}, loyer ${fmtMoney(loyer)}, entrée ${fmtDate(apt.entryDate)}`);
-  saveState();
-  closeModal('modal-new-tenant');
-  toast(`Nouveau locataire créé — augmentation auto +10% en ${new Date(apt.entryDate).getFullYear() + 3}`);
+  const name = document.getElementById('new-name').value.trim();
+  const loyer = parseFloat(document.getElementById('new-loyer').value);
+  if (!name||!loyer) { toast('⚠️ Remplissez nom et loyer'); return; }
+  const apt = state.apartments.find(a=>a.id===aptId);
+  apt.tenant=name; apt.loyer=loyer;
+  apt.entryDate=document.getElementById('new-entry').value||now.toISOString().slice(0,10);
+  apt.obs=document.getElementById('new-obs').value; apt.vacant=false;
+  state.tenants[aptId] = { nom:name, tel:document.getElementById('new-tel').value, email:document.getElementById('new-email').value, cin:document.getElementById('new-cin').value, profession:'', entryDate:apt.entryDate, notes:apt.obs, aptId };
+  if (!state.documents[aptId]) state.documents[aptId]=[];
+  addHistory(aptId,`Nouveau locataire: ${name}, loyer ${fmtMoney(loyer)}`);
+  saveState(); closeModal('modal-new-tenant');
+  toast(`🎉 ${name} enregistré — augmentation en ${new Date(apt.entryDate).getFullYear()+3}`);
   render();
+}
+
+// -- FICHE LOCATAIRE --
+function openTenantFile(aptId) {
+  const apt = state.apartments.find(a=>a.id===aptId);
+  const tr = state.tenants[aptId]||{};
+  document.getElementById('modal-tenant-title').textContent = apt.tenant || 'Fiche locataire';
+  document.getElementById('modal-tenant-body').innerHTML = `
+    <div style="text-align:center;margin-bottom:16px">
+      <div class="tenant-avatar color-${(aptId-1)%13}" style="width:64px;height:64px;font-size:24px;margin:0 auto 8px">${getInitials(apt.tenant)}</div>
+      <div style="font-size:12px;color:var(--text2);font-weight:700">🏠 ${apt.name}</div>
+    </div>
+    <div class="form-group"><label>Nom complet</label><input type="text" id="tf-nom" value="${tr.nom||apt.tenant||''}"></div>
+    <div class="form-group"><label>Téléphone</label><input type="tel" id="tf-tel" value="${tr.tel||''}" placeholder="06 XX XX XX XX" inputmode="tel"></div>
+    <div class="form-group"><label>Email</label><input type="email" id="tf-email" value="${tr.email||''}" placeholder="email@exemple.com"></div>
+    <div class="form-group"><label>CIN / Passeport</label><input type="text" id="tf-cin" value="${tr.cin||''}" placeholder="AA123456"></div>
+    <div class="form-group"><label>Profession</label><input type="text" id="tf-profession" value="${tr.profession||''}" placeholder="Employé, commerçant..."></div>
+    <div class="form-group"><label>Notes</label><textarea id="tf-notes">${tr.notes||''}</textarea></div>
+    <div class="sep-label"><span>Documents</span></div>
+    <div class="btn-row" style="margin-bottom:12px">
+      <button class="btn btn-primary btn-sm" onclick="addDocument(${aptId},'bail')">📋 Ajouter bail</button>
+      <button class="btn btn-purple btn-sm" onclick="addDocument(${aptId},'piece')">📎 Pièce jointe</button>
+      <button class="btn btn-amber btn-sm" onclick="addDocument(${aptId},'photo')">🖼 Photo</button>
+    </div>
+    <div class="doc-list" id="tf-doc-list">${renderDocList(aptId)}</div>
+    <div class="sep"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveTenantFile(${aptId})">💾 Enregistrer</button>
+      <button class="btn btn-secondary" onclick="closeModal('modal-tenant-file')">Annuler</button>
+    </div>
+  `;
+  openModal('modal-tenant-file');
+}
+
+function renderDocList(aptId) {
+  const docs = state.documents[aptId]||[];
+  if (!docs.length) return '<div style="text-align:center;color:var(--text3);font-size:13px;padding:12px">Aucun document</div>';
+  return docs.map((doc,i)=>`<div class="doc-item doc-type-${doc.category||'piece'}" onclick="viewDoc(${aptId},${i})">
+    <div class="doc-icon">${getDocIcon(doc.type)}</div>
+    <div class="doc-info"><div class="doc-name">${doc.name}</div><div class="doc-meta">${doc.category==='bail'?'📋 Bail':doc.category==='photo'?'🖼 Photo':'📎 Pièce'} · ${fmtDate(doc.date)}</div></div>
+    <button class="doc-del" onclick="deleteDoc(${aptId},${i});event.stopPropagation()">✕</button>
+  </div>`).join('');
+}
+
+function saveTenantFile(aptId) {
+  const apt = state.apartments.find(a=>a.id===aptId);
+  const nom = document.getElementById('tf-nom').value.trim();
+  if (!state.tenants[aptId]) state.tenants[aptId] = { aptId };
+  Object.assign(state.tenants[aptId], {
+    nom, tel:document.getElementById('tf-tel').value,
+    email:document.getElementById('tf-email').value,
+    cin:document.getElementById('tf-cin').value,
+    profession:document.getElementById('tf-profession').value,
+    notes:document.getElementById('tf-notes').value,
+    entryDate: apt.entryDate
+  });
+  if (nom) { apt.tenant=nom; }
+  addHistory(aptId,`Fiche locataire mise à jour: ${nom}`);
+  saveState(); closeModal('modal-tenant-file'); toast('✅ Fiche mise à jour'); render();
+}
+
+// -- DOCUMENTS --
+function addDocument(aptId, category) {
+  const input = document.createElement('input');
+  input.type='file';
+  input.accept = category==='bail' ? '.pdf,.doc,.docx' : category==='photo' ? 'image/*' : '*/*';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5*1024*1024) { toast('⚠️ Fichier trop grand (max 5 Mo)'); return; }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      if (!state.documents[aptId]) state.documents[aptId]=[];
+      state.documents[aptId].push({ name:file.name, type:file.type, category, date:now.toISOString().slice(0,10), data:ev.target.result, size:file.size });
+      saveState();
+      // Refresh modal doc list if open
+      const dl = document.getElementById('tf-doc-list');
+      if (dl) dl.innerHTML = renderDocList(aptId);
+      toast(`📎 "${file.name}" ajouté`);
+      render();
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+function deleteDoc(aptId, idx) {
+  if (!confirm('Supprimer ce document ?')) return;
+  state.documents[aptId].splice(idx,1);
+  saveState();
+  const dl = document.getElementById('tf-doc-list');
+  if (dl) dl.innerHTML = renderDocList(aptId);
+  toast('🗑 Document supprimé');
+  render();
+}
+
+function viewDoc(aptId, idx) {
+  const doc = (state.documents[aptId]||[])[idx];
+  if (!doc) return;
+  document.getElementById('modal-doc-title').textContent = doc.name;
+  let content = '';
+  if (doc.type.startsWith('image/')) {
+    content = `<img src="${doc.data}" style="width:100%;border-radius:10px;margin-bottom:12px">`;
+  } else if (doc.type==='application/pdf') {
+    content = `<iframe src="${doc.data}" style="width:100%;height:60vh;border:none;border-radius:10px"></iframe>`;
+  } else {
+    content = `<div style="text-align:center;padding:30px"><div style="font-size:48px;margin-bottom:12px">${getDocIcon(doc.type)}</div><div style="font-weight:700">${doc.name}</div><div style="color:var(--text2);margin-top:4px">${Math.round(doc.size/1024)} Ko</div></div>`;
+  }
+  document.getElementById('modal-doc-body').innerHTML = content + `<button class="btn btn-primary btn-full" style="margin-top:12px" onclick="downloadDoc(${aptId},${idx})">⬇️ Télécharger</button>`;
+  closeModal('modal-tenant-file');
+  openModal('modal-doc-viewer');
+}
+
+function downloadDoc(aptId, idx) {
+  const doc = (state.documents[aptId]||[])[idx];
+  if (!doc) return;
+  const a = document.createElement('a');
+  a.href=doc.data; a.download=doc.name; a.click();
 }
 
 // -- AUGMENTATION --
 function applyIncrease(aptId) {
-  const apt = state.apartments.find(a => a.id === aptId);
-  if (!apt) return;
-  const oldLoyer = apt.loyer;
-  const newLoyer = Math.round(apt.loyer * 1.1);
-  apt.loyer = newLoyer;
-  // Update entry date to now to reset the 3-year clock
+  const apt = state.apartments.find(a=>a.id===aptId);
+  const old = apt.loyer;
+  apt.loyer = Math.round(apt.loyer*1.1);
   const entry = new Date(apt.entryDate);
-  const years = Math.floor((now - entry) / (365.25 * 24 * 3600 * 1000) / 3) * 3;
-  const newEntry = new Date(entry);
-  newEntry.setFullYear(entry.getFullYear() + years);
-  apt.entryDate = newEntry.toISOString().slice(0,10);
-  addHistory(aptId, `Augmentation loyer: ${fmtMoney(oldLoyer)} → ${fmtMoney(newLoyer)} (+10%)`);
-  saveState();
-  toast(`Loyer mis à jour: ${fmtMoney(newLoyer)} ✓`);
-  render();
+  const years = Math.floor((now-entry)/(365.25*24*3600*1000)/3)*3;
+  const ne = new Date(entry); ne.setFullYear(entry.getFullYear()+years);
+  apt.entryDate = ne.toISOString().slice(0,10);
+  addHistory(aptId,`Augmentation: ${fmtMoney(old)} → ${fmtMoney(apt.loyer)}`);
+  saveState(); toast(`📈 Loyer mis à jour: ${fmtMoney(apt.loyer)}`); render();
 }
 
 // -- CANCEL DEBT --
 function cancelDebt(aptId) {
-  if (!confirm('Annuler toute la dette / reliquat de cet appartement ?')) return;
-  const apt = state.apartments.find(a => a.id === aptId);
-  const nowY = now.getFullYear(), nowM = now.getMonth() + 1;
-  for (let y = 2022; y <= nowY; y++) {
-    for (let m = 1; m <= 12; m++) {
-      if (y === nowY && m > nowM) break;
-      const key = getPayKey(aptId, y, m);
-      const loyer = computeLoyer(apt, y, m);
-      if (loyer) {
-        state.payments[key] = { paid: loyer, reliquat: 0, note: 'Dette annulée' };
-      }
+  if (!confirm('Annuler toute la dette de cet appartement ?')) return;
+  const apt = state.apartments.find(a=>a.id===aptId);
+  for (let y=2022; y<=now.getFullYear(); y++) {
+    for (let m=1; m<=12; m++) {
+      if (y===now.getFullYear()&&m>now.getMonth()+1) break;
+      const loyer=computeLoyer(apt,y,m);
+      if (loyer) state.payments[getPayKey(aptId,y,m)]={ paid:loyer, reliquat:0, note:'Annulé' };
     }
   }
-  addHistory(aptId, `Dette / reliquat annulé(e)`);
-  saveState();
-  toast('Reliquat annulé ✓');
-  render();
+  addHistory(aptId,'Reliquat/dette annulé(e)');
+  saveState(); openAptId=null; toast('🗑 Reliquat annulé'); render();
 }
 
-// ============================================================
-// HISTORY
-// ============================================================
-function addHistory(aptId, action) {
-  if (!state.history) state.history = [];
-  state.history.unshift({
-    aptId,
-    action,
-    date: new Date().toISOString(),
-    apt: state.apartments.find(a => a.id === aptId)?.name || ''
-  });
-  if (state.history.length > 200) state.history = state.history.slice(0, 200);
-}
-
-// ============================================================
-// EXPORT / IMPORT
-// ============================================================
+// -- EXPORT/IMPORT --
 function exportData() {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const exportState = JSON.parse(JSON.stringify(state));
+  const blob = new Blob([JSON.stringify(exportState,null,2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `polydeco_backup_${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  toast('Export téléchargé ✓');
+  a.href=url; a.download=`taghzaoui_backup_${now.toISOString().slice(0,10)}.json`; a.click();
+  URL.revokeObjectURL(url); toast('⬇️ Backup téléchargé');
 }
 
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
+function importData(e) {
+  const file=e.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=(ev)=>{
     try {
-      const data = JSON.parse(e.target.result);
-      if (data.apartments && data.payments) {
-        state = data;
-        saveState();
-        toast('Import réussi ✓');
-        render();
-      } else {
-        toast('⚠ Fichier JSON invalide');
-      }
-    } catch { toast('⚠ Erreur de lecture'); }
+      const data=JSON.parse(ev.target.result);
+      if (data.apartments&&data.payments) { state=data; if(!state.tenants)state.tenants={}; if(!state.documents)state.documents={}; saveState(); toast('✅ Import réussi'); render(); }
+      else toast('⚠️ Fichier invalide');
+    } catch { toast('⚠️ Erreur de lecture'); }
   };
-  reader.readAsText(file);
-  event.target.value = '';
+  reader.readAsText(file); e.target.value='';
 }
 
-// ============================================================
+// =====================================================
 // INIT
-// ============================================================
+// =====================================================
 loadState();
 render();
 </script>
